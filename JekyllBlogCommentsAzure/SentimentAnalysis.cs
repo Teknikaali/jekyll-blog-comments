@@ -55,7 +55,7 @@ namespace JekyllBlogCommentsAzure
             {
                 Endpoint = $"https://{_region}.api.cognitive.microsoft.com"
             };
-            SentimentBatchResult result = client.SentimentAsync(
+            SentimentBatchResult result = client.SentimentBatchAsync(
                 new MultiLanguageBatchInput(
                     SplitFiveHundredChars(input).ToList()
                 )).Result;

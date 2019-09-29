@@ -1,21 +1,25 @@
-﻿using System.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace JekyllBlogCommentsAzure
 {
     public class WebConfigurator
     {
-        public string CommentWebsiteUrl => ConfigurationManager.AppSettings["CommentWebsiteUrl"];
+        private static IConfigurationRoot _config = new ConfigurationBuilder()
+            .AddEnvironmentVariables()
+            .Build();
 
-        public string GitHubToken => ConfigurationManager.AppSettings["GitHubToken"];
+        public string CommentWebsiteUrl => _config["CommentWebsiteUrl"];
 
-        public string PullRequestRepository => ConfigurationManager.AppSettings["PullRequestRepository"];
+        public string GitHubToken => _config["GitHubToken"];
 
-        public string CommentFallbackCommitEmail => ConfigurationManager.AppSettings["CommentFallbackCommitEmail"];
+        public string PullRequestRepository => _config["PullRequestRepository"];
 
-        public string SentimentAnalysisSubscriptionKey => ConfigurationManager.AppSettings["SentimentAnalysis.SubscriptionKey"];
+        public string CommentFallbackCommitEmail => _config["CommentFallbackCommitEmail"];
 
-        public string SentimentAnalysisRegion => ConfigurationManager.AppSettings["SentimentAnalysis.Region"];
+        public string SentimentAnalysisSubscriptionKey => _config["SentimentAnalysis.SubscriptionKey"];
 
-        public string SentimentAnalysisLang => ConfigurationManager.AppSettings["SentimentAnalysis.Lang"];
+        public string SentimentAnalysisRegion => _config["SentimentAnalysis.Region"];
+
+        public string SentimentAnalysisLang => _config["SentimentAnalysis.Lang"];
     }
 }
