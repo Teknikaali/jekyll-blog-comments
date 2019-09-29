@@ -11,7 +11,7 @@ The app includes just one function:
 To set this up, you'll need to have an [Azure Portal account](https://portal.azure.com).
 
 1. Fork this repository
-2. [Create a **v1** Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-azure-function)
+2. [Create a **v2** Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-azure-function)
 3. [Create subscription key in Microsoft Azure Recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account) **optional**
 4. [Set up your function to deploy from your fork](https://docs.microsoft.com/en-us/azure/azure-functions/scripts/functions-cli-create-function-app-github-continuous)
 5. Set up the following [App Settings for your Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings)
