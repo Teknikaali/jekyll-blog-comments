@@ -12,7 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{464BAC08-6
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JekyllBlogCommentsAzure", "JekyllBlogCommentsAzure\JekyllBlogCommentsAzure.csproj", "{C436D452-17BE-4550-8D10-E8DFE7B22671}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JekyllBlogCommentsAzure", "JekyllBlogCommentsAzure\JekyllBlogCommentsAzure.csproj", "{C436D452-17BE-4550-8D10-E8DFE7B22671}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationCore", "ApplicationCore\ApplicationCore.csproj", "{A1B9641E-58BD-4905-B030-5A0C12946603}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationCore.Tests", "ApplicationCore.Tests\ApplicationCore.Tests.csproj", "{14F06181-CEC0-4B0A-BCA6-7B2EF556ECBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,6 +28,14 @@ Global
 		{C436D452-17BE-4550-8D10-E8DFE7B22671}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C436D452-17BE-4550-8D10-E8DFE7B22671}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C436D452-17BE-4550-8D10-E8DFE7B22671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1B9641E-58BD-4905-B030-5A0C12946603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1B9641E-58BD-4905-B030-5A0C12946603}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1B9641E-58BD-4905-B030-5A0C12946603}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1B9641E-58BD-4905-B030-5A0C12946603}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F06181-CEC0-4B0A-BCA6-7B2EF556ECBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F06181-CEC0-4B0A-BCA6-7B2EF556ECBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F06181-CEC0-4B0A-BCA6-7B2EF556ECBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F06181-CEC0-4B0A-BCA6-7B2EF556ECBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
