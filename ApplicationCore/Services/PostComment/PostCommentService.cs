@@ -28,7 +28,7 @@ namespace ApplicationCore
 
             //Make sure the site posting the comment is the correct site.
             var allowedSite = _config.CommentWebsiteUrl.AbsoluteUri;
-            var postedSite = form["CommentSite"]; // TODO: FIX MAGIC STRING
+            var postedSite = form["CommentSite"]; // TODO: fix magic string
             if (!string.IsNullOrWhiteSpace(allowedSite) && !AreSameSites(allowedSite, postedSite))
                 return new PostCommentResult(
                     HttpStatusCode.BadRequest,
@@ -61,7 +61,8 @@ namespace ApplicationCore
             }
             else
             {
-                return new PostCommentResult(HttpStatusCode.BadRequest, string.Join("\n", commentResult.Errors)); // TODO: Tässä ei mene mukana poikkeusta
+                // TODO: Include possible exception
+                return new PostCommentResult(HttpStatusCode.BadRequest, string.Join("\n", commentResult.Errors)); 
             }
         }
 

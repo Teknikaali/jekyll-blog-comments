@@ -10,30 +10,28 @@ using ApplicationCore.Model;
 
 namespace ApplicationCore
 {
-    public class CommentForm
+    public class CommentForm : ICommentForm
     {
         /// <summary>
         /// Simplest form of email validation
         /// </summary>
         private static readonly Regex _validEmail = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
-
-        public Dictionary<string, FormField> Fields { get; }
+        private readonly Dictionary<string, FormField> _fields;
+        private readonly ConstructorInfo _constructor;
 
         public IEnumerable<string> Errors { get; }
 
         public bool IsValid => !Errors.Any();
 
-        private readonly ConstructorInfo _constructor;
-
         public CommentForm(NameValueCollection form)
         {
             _constructor = typeof(Comment).GetConstructors()[0];
 
-            Fields = _constructor.GetParameters().ToDictionary(
+            _fields = _constructor.GetParameters().ToDictionary(
                 p => p.Name ?? throw new NullReferenceException("Constructor parameter name was null."),
                 p => TryConvertFormFieldValue(form[p.Name], p));
 
-            var errors = Fields
+            var errors = _fields
                 .Where(p => p.Value.HasError)
                 .Select(p => p.Value.Error)
                 .ToList();
@@ -55,7 +53,7 @@ namespace ApplicationCore
         {
             if (!Errors.Any())
             {
-                return new CommentResult((Comment)_constructor.Invoke(Fields.Values.Select(x => x.Value).ToArray()));
+                return new CommentResult((Comment)_constructor.Invoke(_fields.Values.Select(x => x.Value).ToArray()));
             }
             else
             {
@@ -76,7 +74,10 @@ namespace ApplicationCore
             {
                 if (!string.IsNullOrEmpty(fieldValue))
                 {
-                    return new FormField(parameterInfo.Name, fieldValue, isRequired: false);
+                    return new FormField(
+                        parameterInfo.Name,
+                        TypeDescriptor.GetConverter(parameterInfo.ParameterType).ConvertFrom(fieldValue),
+                        isRequired: false);
                 }
                 else
                 {
@@ -101,7 +102,7 @@ namespace ApplicationCore
         // TODO: Remove magic string "Email"
         private bool IsEmailValid()
         {
-            var email = Fields["email"].Value as string;
+            var email = _fields["email"].Value as string;
             
             if(string.IsNullOrEmpty(email))
             {

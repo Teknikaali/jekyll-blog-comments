@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Threading.Tasks;
 using ApplicationCore.Analytics;
+using ApplicationCore.Model;
 using Moq;
 using Xunit;
 
@@ -9,20 +10,71 @@ namespace ApplicationCore.Tests
     public class CommentFactoryTests
     {
         [Fact]
-        public async Task CreatesValidCommentWithOnlyRequiredValues()
+        public async Task ValidCommentIsAnalyzedWhenCanAnalyze()
         {
+            var nonAnalyzedComment = new CommentResult(
+                new Comment("this-is-non-analyzed-post", "I have not been analyzed", "Non analyzed"));
+            var analyzedComment = new CommentResult(
+                new Comment("this-is-analyzed-post", "I have been analyzed", "Analyzed"));
+
+            var commentFormMock = new Mock<ICommentForm>();
+            commentFormMock.Setup(x => x.IsValid)
+                .Returns(true);
+            commentFormMock.Setup(x => x.TryCreateComment())
+                .Returns(nonAnalyzedComment);
+
+            var commentFormFactoryMock = new Mock<ICommentFormFactory>();
+            commentFormFactoryMock.Setup(x => x.CreateCommentForm(It.IsAny<NameValueCollection>()))
+                .Returns(commentFormMock.Object);
+
             var textAnalyzerMock = new Mock<ITextAnalyzer>();
-            ICommentFactory commentFactory = new CommentFactory(textAnalyzerMock.Object);
+            textAnalyzerMock.Setup(x => x.CanAnalyze)
+                .Returns(true);
+            textAnalyzerMock.Setup(x => x.AnalyzeAsync(It.IsAny<Comment>()))
+                .ReturnsAsync(analyzedComment);
 
-            var form = new NameValueCollection
-            {
-                { "postId", "this-is-a-post-slug" },
-                { "message", "This is the message" },
-                { "name", "My Very Own Name" }
-            };
-            var commentResult = await commentFactory.CreateFromFormAsync(form);
+            ICommentFactory commentFactory = new CommentFactory(
+                commentFormFactoryMock.Object,
+                textAnalyzerMock.Object);
 
-            Assert.False(commentResult.HasErrors, "Comment should not have errors.");
+            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection());
+
+            Assert.Equal(analyzedComment, actualComment);
+        }
+
+        // TODO: merge with ValidCommentIsAnalyzedWhenCanAnalyze (Theory)
+
+        [Fact]
+        public async Task InvalidCommentIsNotAnalyzed()
+        {
+            var nonAnalyzedComment = new CommentResult(
+                new Comment("this-is-non-analyzed-post", "I have not been analyzed", "Non analyzed"));
+            var analyzedComment = new CommentResult(
+                new Comment("this-is-analyzed-post", "I have been analyzed", "Analyzed"));
+
+            var commentFormMock = new Mock<ICommentForm>();
+            commentFormMock.Setup(x => x.IsValid)
+                .Returns(false);
+            commentFormMock.Setup(x => x.TryCreateComment())
+                .Returns(nonAnalyzedComment);
+
+            var commentFormFactoryMock = new Mock<ICommentFormFactory>();
+            commentFormFactoryMock.Setup(x => x.CreateCommentForm(It.IsAny<NameValueCollection>()))
+                .Returns(commentFormMock.Object);
+
+            var textAnalyzerMock = new Mock<ITextAnalyzer>();
+            textAnalyzerMock.Setup(x => x.CanAnalyze)
+                .Returns(true);
+            textAnalyzerMock.Setup(x => x.AnalyzeAsync(It.IsAny<Comment>()))
+                .ReturnsAsync(analyzedComment);
+
+            ICommentFactory commentFactory = new CommentFactory(
+                commentFormFactoryMock.Object,
+                textAnalyzerMock.Object);
+
+            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection());
+
+            Assert.Equal(nonAnalyzedComment, actualComment);
         }
     }
 }

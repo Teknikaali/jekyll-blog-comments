@@ -24,7 +24,9 @@ namespace JekyllBlogCommentsAzure
             static IPostCommentService CreatePostCommentService(IServiceProvider serviceProvider)
             {
                 var config = new WebConfigurator();
-                var commentFactory = new CommentFactory(new TextAnalyzer(config, new TextAnalyticsClientFactory()));
+                var commentFactory = new CommentFactory(
+                    new CommentFormFactory(),
+                    new TextAnalyzer(config, new TextAnalyticsClientFactory()));
                 var pullRequestService = config.PushToGitHub
                     ? new PullRequestService(
                         config,
