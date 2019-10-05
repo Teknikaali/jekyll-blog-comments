@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using ApplicationCore.Model;
 using Xunit;
@@ -12,7 +13,7 @@ namespace ApplicationCore.Tests
         public void ValidFormShouldNotHaveErrors(MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> testCase)
         {
             var form = new NameValueCollection();
-            foreach (var fieldValuePair in testCase.Object)
+            foreach (var fieldValuePair in testCase.TestCase)
             {
                 form.Add(fieldValuePair.Key, fieldValuePair.Value);
             }
@@ -29,7 +30,7 @@ namespace ApplicationCore.Tests
         public void InvalidFormShouldHaveErrors(MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> testCase)
         {
             var form = new NameValueCollection();
-            foreach (var fieldValuePair in testCase.Object)
+            foreach (var fieldValuePair in testCase.TestCase)
             {
                 form.Add(fieldValuePair.Key, fieldValuePair.Value);
             }
@@ -165,8 +166,15 @@ namespace ApplicationCore.Tests
         /// <param name="testCase">Test case to wrap</param>
         /// <param name="description">Short and easy to read test case description</param>
         /// <returns>Wrapped <see cref="FormTestCase"/></returns>
-        public static MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> ForTestCase(this IEnumerable<KeyValuePair<string, string>> testCase, string description)
+        public static MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> ForTestCase(
+            this IEnumerable<KeyValuePair<string, string>> testCase,
+            string description)
         {
+            if (testCase is null)
+            {
+                throw new ArgumentNullException(nameof(testCase));
+            }
+
             return new MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>>(description, testCase);
         }
     }

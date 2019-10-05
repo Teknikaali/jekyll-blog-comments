@@ -37,7 +37,8 @@ namespace ApplicationCore.Tests
                 commentFormFactoryMock.Object,
                 textAnalyzerMock.Object);
 
-            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection());
+            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection())
+                .ConfigureAwait(false);
 
             Assert.Equal(analyzedComment, actualComment);
         }
@@ -72,7 +73,8 @@ namespace ApplicationCore.Tests
                 commentFormFactoryMock.Object,
                 textAnalyzerMock.Object);
 
-            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection());
+            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection())
+                .ConfigureAwait(false);
 
             Assert.Equal(nonAnalyzedComment, actualComment);
         }
