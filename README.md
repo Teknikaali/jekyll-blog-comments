@@ -19,6 +19,8 @@ The app includes just one function:
 
 Coverage reports are located in the [gh-pages branch](https://github.com/Teknikaali/jekyll-blog-comments/tree/gh-pages).
 
+(click the badge to see the full coverage report)
+
 ## Setup
 
 To set this up, you'll need to have an [Azure Portal account](https://portal.azure.com).
