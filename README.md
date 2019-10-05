@@ -8,7 +8,8 @@ The app includes just one function:
 
 ## Code coverage status
 
-![Branch coverage](/ApplicationCore.Tests/BuildReports/Coverage/badge_branchcoverage.svg?raw=true&sanitize=true) ![Line coverage](/ApplicationCore.Tests/BuildReports/Coverage/badge_linecoverage.svg?raw=true&sanitize=true)
+[![Branch coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_branchcoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/)
+[![Line coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_linecoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/)
 
 ## Setup
 
