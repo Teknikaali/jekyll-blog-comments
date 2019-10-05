@@ -6,6 +6,10 @@ The app includes just one function:
 
 * `PostComment` - receives form POST submission and creates a PR to add the comment to your Jekyll site
 
+## Code coverage status
+
+![Branch coverage](/ApplicationCore.Tests/BuildReports/Coverage/badge_branchcoverage.svg?raw=true&sanitize=true) ![Line coverage](/ApplicationCore.Tests/BuildReports/Coverage/badge_linecoverage.svg?raw=true&sanitize=true)
+
 ## Setup
 
 To set this up, you'll need to have an [Azure Portal account](https://portal.azure.com).

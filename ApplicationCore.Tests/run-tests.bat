@@ -1,0 +1,2 @@
+dotnet test --test-adapter-path:. --logger:xunit --results-directory:./BuildReports/UnitTests /p:CollectCoverage=true /p:CoverletOutput=BuildReports\Coverage\ /p:CoverletOutputFormat=opencover
+dotnet reportgenerator	"-reports:BuildReports\Coverage\coverage.opencover.xml" "-targetdir:BuildReports\Coverage" "-reporttypes:HTML;Badges" "-historydir:BuildReports\Coverage\History"
