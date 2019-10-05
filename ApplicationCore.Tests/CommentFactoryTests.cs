@@ -18,8 +18,8 @@ namespace ApplicationCore.Tests
                 new Comment("this-is-analyzed-post", "I have been analyzed", "Analyzed"));
 
             var commentFormMock = new Mock<ICommentForm>();
-            commentFormMock.Setup(x => x.IsValid)
-                .Returns(true);
+            commentFormMock.Setup(x => x.HasErrors)
+                .Returns(false);
             commentFormMock.Setup(x => x.TryCreateComment())
                 .Returns(nonAnalyzedComment);
 
@@ -42,7 +42,7 @@ namespace ApplicationCore.Tests
             Assert.Equal(analyzedComment, actualComment);
         }
 
-        // TODO: merge with ValidCommentIsAnalyzedWhenCanAnalyze (Theory)
+        // TODO: merge with ValidCommentIsAnalyzedWhenCanAnalyze (Theory) and add more cases
 
         [Fact]
         public async Task InvalidCommentIsNotAnalyzed()
@@ -53,8 +53,8 @@ namespace ApplicationCore.Tests
                 new Comment("this-is-analyzed-post", "I have been analyzed", "Analyzed"));
 
             var commentFormMock = new Mock<ICommentForm>();
-            commentFormMock.Setup(x => x.IsValid)
-                .Returns(false);
+            commentFormMock.Setup(x => x.HasErrors)
+                .Returns(true);
             commentFormMock.Setup(x => x.TryCreateComment())
                 .Returns(nonAnalyzedComment);
 

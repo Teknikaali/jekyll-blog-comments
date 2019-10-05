@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using ApplicationCore.Model;
 
 namespace ApplicationCore
 {

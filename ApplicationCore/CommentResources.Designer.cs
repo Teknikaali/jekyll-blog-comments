@@ -70,6 +70,15 @@ namespace ApplicationCore {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &apos;{0}&apos; cannot be converted to type &apos;{1}&apos;.
+        /// </summary>
+        internal static string InvalidTypeConversionErrorMessage {
+            get {
+                return ResourceManager.GetString("InvalidTypeConversionErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Required form value &apos;{0}&apos; is missing.
         /// </summary>
         internal static string MissingRequiredValueErrorMessage {

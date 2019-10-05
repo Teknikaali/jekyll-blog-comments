@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace ApplicationCore
+namespace ApplicationCore.Model
 {
     public interface ICommentForm
     {
-        bool IsValid { get; }
+        bool HasErrors { get; }
         IEnumerable<string> Errors { get; }
         CommentResult TryCreateComment();
     }

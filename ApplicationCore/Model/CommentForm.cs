@@ -6,9 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using ApplicationCore.Model;
 
-namespace ApplicationCore
+namespace ApplicationCore.Model
 {
     public class CommentForm : ICommentForm
     {
@@ -16,12 +15,13 @@ namespace ApplicationCore
         /// Simplest form of email validation
         /// </summary>
         private static readonly Regex _validEmail = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+
         private readonly Dictionary<string, FormField> _fields;
         private readonly ConstructorInfo _constructor;
 
         public IEnumerable<string> Errors { get; }
 
-        public bool IsValid => !Errors.Any();
+        public bool HasErrors => Errors.Any();
 
         public CommentForm(NameValueCollection form)
         {
@@ -74,10 +74,23 @@ namespace ApplicationCore
             {
                 if (!string.IsNullOrEmpty(fieldValue))
                 {
-                    return new FormField(
-                        parameterInfo.Name,
-                        TypeDescriptor.GetConverter(parameterInfo.ParameterType).ConvertFrom(fieldValue),
-                        isRequired: false);
+                    var converter = TypeDescriptor.GetConverter(parameterInfo.ParameterType);
+
+                    if (converter.IsValid(fieldValue))
+                    {
+                        var convertedValue = converter.ConvertFrom(fieldValue);
+                        return new FormField(parameterInfo.Name, convertedValue, isRequired: false);
+                    }
+                    else
+                    {
+                        return new FormField(
+                            parameterInfo.Name,
+                            string.Format(
+                                CultureInfo.InvariantCulture,
+                                CommentResources.InvalidTypeConversionErrorMessage,
+                                fieldValue,
+                                parameterInfo.ParameterType.ToString()));
+                    }
                 }
                 else
                 {
@@ -99,38 +112,17 @@ namespace ApplicationCore
             bool IsOptionalField() => parameterInfo.HasDefaultValue;
         }
 
-        // TODO: Remove magic string "Email"
+        // TODO: Remove magic string "email"
         private bool IsEmailValid()
         {
             var email = _fields["email"].Value as string;
-            
-            if(string.IsNullOrEmpty(email))
+
+            if (string.IsNullOrEmpty(email))
             {
                 return true;
             }
 
-            return  _validEmail.IsMatch(email);
-        }
-    }
-
-    public class FormField
-    {
-        public string Name { get; }
-        public object? Value { get; }
-        public bool IsRequired { get; }
-        public string Error { get; } = string.Empty;
-        public bool HasError => !string.IsNullOrEmpty(Error);
-
-        public FormField(string name, object? value, bool isRequired)
-        {
-            Name = name;
-            Value = value;
-            IsRequired = isRequired;
-        }
-
-        public FormField(string name, string error) :this(name, value: null, isRequired: true)
-        {
-            Error = error;
+            return _validEmail.IsMatch(email);
         }
     }
 }

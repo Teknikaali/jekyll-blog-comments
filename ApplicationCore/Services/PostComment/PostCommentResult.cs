@@ -17,17 +17,20 @@ namespace ApplicationCore
             Error = error;
         }
 
-        public PostCommentResult(HttpStatusCode httpStatusCode) : this(httpStatusCode, string.Empty)
+        public PostCommentResult(HttpStatusCode httpStatusCode)
+            : this(httpStatusCode, string.Empty)
         {
-
-        }
         
-        public PostCommentResult(HttpStatusCode httpStatusCode, string error, Exception exception) :this(httpStatusCode, error)
+        }
+
+        public PostCommentResult(HttpStatusCode httpStatusCode, string error, Exception exception)
+            : this(httpStatusCode, error)
         {
             Exception = exception;
         }
 
-        public PostCommentResult(HttpStatusCode httpStatusCode, Uri redirectUri) :this(httpStatusCode)
+        public PostCommentResult(HttpStatusCode httpStatusCode, Uri redirectUri)
+            : this(httpStatusCode)
         {
             RedirectUrl = redirectUri;
         }

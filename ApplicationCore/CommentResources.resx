@@ -120,6 +120,9 @@
   <data name="AreNotSameSitesErrorMessage" xml:space="preserve">
     <value>This Jekyll comments receiever does not handle forms for '{0}'. You should point to your own instance</value>
   </data>
+  <data name="InvalidTypeConversionErrorMessage" xml:space="preserve">
+    <value>'{0}' cannot be converted to type '{1}'</value>
+  </data>
   <data name="MissingRequiredValueErrorMessage" xml:space="preserve">
     <value>Required form value '{0}' is missing</value>
   </data>
