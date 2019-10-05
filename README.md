@@ -1,3 +1,10 @@
+# Customizations
+
+This repository is a heavily modified version of the original:
+* Core functionality has been moved to a different project file making the PostComment just a thin passthrough layer
+* Heavily uses Dependency Injection to make code more testable
+* Adds xUnit unit test and code coverage reporting with Coverlet + ReportGenerator
+
 # Jekyll Blog Comments Azure Function
 
 An Azure Function App that receives comment form posts and creates a pull request against your GitHub repository as part of the [jekyll-blog-comments](https://github.com/damieng/jekyll-blog-comments) system.
@@ -8,8 +15,9 @@ The app includes just one function:
 
 ## Code coverage status
 
-[![Branch coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_branchcoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/)
-[![Line coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_linecoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/)
+[![Branch coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_branchcoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/) [![Line coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_linecoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/)
+
+Coverage reports are located in the [gh-pages branch](https://github.com/Teknikaali/jekyll-blog-comments/tree/gh-pages).
 
 ## Setup
 
