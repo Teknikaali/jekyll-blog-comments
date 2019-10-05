@@ -136,3 +136,5 @@ UpgradeLog*.htm
 *.mdf
 *.ldf
 
+# Build reports (Code Coverage)
+BuildReports/
