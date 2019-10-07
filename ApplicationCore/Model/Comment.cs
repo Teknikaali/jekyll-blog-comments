@@ -91,9 +91,4 @@ namespace ApplicationCore.Model
             return new Comment(PostId, Message, Name, Email, Url, Date, Id, Avatar, score);
         }
     }
-
-    public class InvalidComment : Comment
-    {
-        public InvalidComment() : base(string.Empty, string.Empty, string.Empty) { }
-    }
 }

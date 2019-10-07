@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 using ApplicationCore.Model;
 using Xunit;
 
-namespace ApplicationCore.Tests
+namespace ApplicationCore.Tests.Model
 {
     public class CommentFormTests
     {

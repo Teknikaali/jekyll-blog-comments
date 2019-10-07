@@ -38,6 +38,7 @@
   <ItemGroup>
     <Folder Include="BuildReports\Coverage\" />
     <Folder Include="BuildReports\UnitTests\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

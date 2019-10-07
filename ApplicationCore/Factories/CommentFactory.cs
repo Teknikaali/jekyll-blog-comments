@@ -20,7 +20,7 @@ namespace ApplicationCore
             var commentForm = _commentFormFactory.CreateCommentForm(form);
             var commentResult = commentForm.TryCreateComment();
 
-            if (!commentForm.HasErrors && _textAnalyzer.CanAnalyze)
+            if (!commentForm.HasErrors)
             {
                 commentResult = await _textAnalyzer.AnalyzeAsync(commentResult.Comment).ConfigureAwait(false);
             }
