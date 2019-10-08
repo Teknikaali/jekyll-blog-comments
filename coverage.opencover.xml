@@ -2,9 +2,9 @@
 <CoverageSession>
   <Summary numSequencePoints="381" visitedSequencePoints="214" numBranchPoints="97" visitedBranchPoints="44" sequenceCoverage="56.16" branchCoverage="45.36" maxCyclomaticComplexity="160" minCyclomaticComplexity="160" visitedClasses="12" numClasses="23" visitedMethods="40" numMethods="79" />
   <Modules>
-    <Module hash="AD0CF11C-8D84-420E-91D9-9ACE4CFB287C">
+    <Module hash="9DDD81C8-7EA9-43A2-B2E7-50D7A6224142">
       <ModulePath>ApplicationCore.dll</ModulePath>
-      <ModuleTime>2019-10-08T05:59:26</ModuleTime>
+      <ModuleTime>2019-10-08T06:12:39</ModuleTime>
       <ModuleName>ApplicationCore</ModuleName>
       <Files>
         <File uid="1" fullPath="C:\Users\Teknikaali\Source\Repos\jekyll-blog-comments\ApplicationCore\Factories\CommentFactory.cs" />
