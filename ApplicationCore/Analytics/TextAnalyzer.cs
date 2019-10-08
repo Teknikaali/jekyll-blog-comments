@@ -11,6 +11,8 @@ namespace ApplicationCore.Analytics
 {
     public class TextAnalyzer : ITextAnalyzer
     {
+        private const int _splitTextLength = 500;
+
         private readonly string _subscriptionKey;
         private readonly string _region;
         private readonly string _lang;
@@ -59,20 +61,36 @@ namespace ApplicationCore.Analytics
 
         private IEnumerable<MultiLanguageInput> SplitFiveHundredChars(string input)
         {
+            var inputs = new List<MultiLanguageInput>();
+
             if (string.IsNullOrEmpty(input))
             {
-                yield break;
+                return inputs;
             }
 
             var id = 0;
-            for (var i = 0; i < input.Length; i += 500)
+            for (var i = 0; i < input.Length; i += _splitTextLength)
             {
-                yield return new MultiLanguageInput(
-                    id: id.ToString(CultureInfo.InvariantCulture),
-                    text: input.Substring(i, Math.Min(500, input.Length - i)),
-                    language: _lang);
-                id++;
+                var multiLanguageInput = new MultiLanguageInput
+                {
+                    Id = id.ToString(CultureInfo.InvariantCulture),
+                    Language = _lang
+                };
+
+                if((i + _splitTextLength) < input.Length)
+                {
+                    multiLanguageInput.Text = input.Substring(i, Math.Min(500, input.Length - i));
+                    id++;
+                }
+                else
+                {
+                    multiLanguageInput.Text = input;
+                }
+
+                inputs.Add(multiLanguageInput);
             }
+
+            return inputs;
         }
     }
 }

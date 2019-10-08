@@ -26,7 +26,7 @@ namespace JekyllBlogCommentsAzure
                 var config = new WebConfigurator();
                 var commentFactory = new CommentFactory(
                     new CommentFormFactory(),
-                    new TextAnalyzer(config, new TextAnalyticsClientFactory()));
+                    new TextAnalyzer(config, new TextAnalyticsClientFactory(new CredentialsFactory())));
                 var pullRequestService = config.PushToGitHub
                     ? new PullRequestService(
                         config,
