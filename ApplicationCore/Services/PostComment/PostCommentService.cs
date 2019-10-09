@@ -12,7 +12,10 @@ namespace ApplicationCore
         private readonly ICommentFactory _commentFactory;
         private readonly IPullRequestService _pullRequestService;
 
-        public PostCommentService(IWebConfigurator config, ICommentFactory commentFactory, IPullRequestService pullRequestService)
+        public PostCommentService(
+            IWebConfigurator config,
+            ICommentFactory commentFactory,
+            IPullRequestService pullRequestService)
         {
             _config = config;
             _commentFactory = commentFactory;
@@ -30,12 +33,14 @@ namespace ApplicationCore
             var allowedSite = _config.CommentWebsiteUrl.AbsoluteUri;
             var postedSite = form["CommentSite"]; // TODO: fix magic string
             if (!string.IsNullOrWhiteSpace(allowedSite) && !AreSameSites(allowedSite, postedSite))
+            {
                 return new PostCommentResult(
                     HttpStatusCode.BadRequest,
                     string.Format(
                         CultureInfo.InvariantCulture,
                         CommentResources.AreNotSameSitesErrorMessage,
                         postedSite));
+            }
 
             var commentResult = await _commentFactory.CreateFromFormAsync(form).ConfigureAwait(false);
 
