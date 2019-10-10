@@ -11,7 +11,7 @@ namespace ApplicationCore.Tests.Services
     public class PostCommentServiceTests
     {
         private const string _website = "http://www.example.com/";
-        private IWebConfigurator _config;
+        private readonly IWebConfigurator _config;
 
         public PostCommentServiceTests()
         {
