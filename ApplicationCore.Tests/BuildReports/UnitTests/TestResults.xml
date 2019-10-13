@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<assemblies timestamp="10/13/2019 21:01:58">
+  <assembly name="C:\Users\Teknikaali\source\repos\jekyll-blog-comments\ApplicationCore.Tests\bin\Debug\netcoreapp2.2\ApplicationCore.Tests.dll" run-date="2019-10-13" run-time="21:01:58" total="38" passed="38" failed="0" skipped="0" time="2.072" errors="0">
+    <errors />
+    <collection total="1" passed="1" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Analytics.CredentialsFactoryTests" time="0.018">
+      <test name="ApplicationCore.Tests.Analytics.CredentialsFactoryTests.CreatedCredentialsHaveSubscriptionKeyInRequestHeader" type="ApplicationCore.Tests.Analytics.CredentialsFactoryTests" method="CreatedCredentialsHaveSubscriptionKeyInRequestHeader" time="0.0180000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="1" passed="1" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Analytics.TextAnalyticsClientFactoryTests" time="0.242">
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyticsClientFactoryTests.CreatesRegionalClient" type="ApplicationCore.Tests.Analytics.TextAnalyticsClientFactoryTests" method="CreatesRegionalClient" time="0.2420000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="7" passed="7" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Analytics.TextAnalyzerTests" time="0.310">
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyzerTests.AnalyzesSentimentScore(message: &quot;**************************************************&quot;..., score: 0,75)" type="ApplicationCore.Tests.Analytics.TextAnalyzerTests" method="AnalyzesSentimentScore" time="0.2580000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyzerTests.AnalyzesSentimentScore(message: &quot;&quot;, score: 0)" type="ApplicationCore.Tests.Analytics.TextAnalyzerTests" method="AnalyzesSentimentScore" time="0.0020000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyzerTests.ThrowsIfConstructorDependenciesAreInvalid" type="ApplicationCore.Tests.Analytics.TextAnalyzerTests" method="ThrowsIfConstructorDependenciesAreInvalid" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyzerTests.ReturnsCommentIntactIfNotAnalyzed" type="ApplicationCore.Tests.Analytics.TextAnalyzerTests" method="ReturnsCommentIntactIfNotAnalyzed" time="0.0020000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyzerTests.CanAnalyzeOnlyIfValidSubscriptionKeyIsProvided(subscriptionKey: &quot;&quot;, expectedResult: False)" type="ApplicationCore.Tests.Analytics.TextAnalyzerTests" method="CanAnalyzeOnlyIfValidSubscriptionKeyIsProvided" time="0.0050000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyzerTests.CanAnalyzeOnlyIfValidSubscriptionKeyIsProvided(subscriptionKey: &quot;TotallyValidSubscriptionKey&quot;, expectedResult: True)" type="ApplicationCore.Tests.Analytics.TextAnalyzerTests" method="CanAnalyzeOnlyIfValidSubscriptionKeyIsProvided" time="0.0390000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Analytics.TextAnalyzerTests.ThrowsIfTryingToAnalyzeNullComment" type="ApplicationCore.Tests.Analytics.TextAnalyzerTests" method="ThrowsIfTryingToAnalyzeNullComment" time="0.0030000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="2" passed="2" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Model.CommentFactoryTests" time="0.308">
+      <test name="ApplicationCore.Tests.Model.CommentFactoryTests.ValidCommentIsAnalyzedWhenCanAnalyze" type="ApplicationCore.Tests.Model.CommentFactoryTests" method="ValidCommentIsAnalyzedWhenCanAnalyze" time="0.2690000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFactoryTests.InvalidCommentIsNotAnalyzed" type="ApplicationCore.Tests.Model.CommentFactoryTests" method="InvalidCommentIsNotAnalyzed" time="0.0390000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="1" passed="1" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Model.CommentFormFactoryTests" time="0.018">
+      <test name="ApplicationCore.Tests.Model.CommentFormFactoryTests.CreatesCommentFormFromForm" type="ApplicationCore.Tests.Model.CommentFormFactoryTests" method="CreatesCommentFormFromForm" time="0.0180000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="10" passed="10" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Model.CommentFormTests" time="0.012">
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.ValidFormShouldNotHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;All required fields and no optionals&quot;, TestCase = [[postId, this-is-a-post-slug], [message, This is the message], [name, My Name]] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="ValidFormShouldNotHaveErrors" time="0.0030000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.ValidFormShouldNotHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;All required fields, 1 optional and many empty opt&quot;..., TestCase = [[postId, this-is-a-post-slug], [message, This is the message], [name, My Very Own Name], [email, foo@example.com], [url, ], ...] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="ValidFormShouldNotHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.ValidFormShouldNotHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;Valid required fields with single invalid field&quot;, TestCase = [[postId, this-is-a-post-slug], [message, This is the message], [name, My Very Own Name], [thisIsInvalidKey, this-should-be-okay]] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="ValidFormShouldNotHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.ValidFormShouldNotHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;All required fields and 1 optional&quot;, TestCase = [[postId, this-is-a-post-slug], [message, This is the message], [name, My Very Own Name], [email, foo@example.com]] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="ValidFormShouldNotHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.ValidFormShouldNotHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;All fields in reverse order&quot;, TestCase = [[score, 0.5], [avatar, http://www.example.com/avatar.png], [url, http://www.example.com], [email, foo@example.com], [name, My Very Own Name], ...] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="ValidFormShouldNotHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.ValidFormShouldNotHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;Valid required fields with invalid url value&quot;, TestCase = [[postId, this-is-a-post-slug], [message, This is the message], [name, My Very Own Name], [url, this-is-invalid-url]] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="ValidFormShouldNotHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.ValidFormShouldNotHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;All required fields and all optionals&quot;, TestCase = [[postId, this-is-a-post-slug], [message, This is the message], [name, My Very Own Name], [email, foo@example.com], [url, http://www.example.com], ...] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="ValidFormShouldNotHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.InvalidFormShouldHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;No fields&quot;, TestCase = [] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="InvalidFormShouldHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.InvalidFormShouldHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;Single invalid field&quot;, TestCase = [[thisIsInvalidKey, this-should-not-work]] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="InvalidFormShouldHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Model.CommentFormTests.InvalidFormShouldHaveErrors(testCase: MemberDataSerializer`1 { Description = &quot;Single valid required field&quot;, TestCase = [[postId, this-is-a-post-slug]] })" type="ApplicationCore.Tests.Model.CommentFormTests" method="InvalidFormShouldHaveErrors" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="3" passed="3" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Services.GitHubClientFactoryTests" time="0.188">
+      <test name="ApplicationCore.Tests.Services.GitHubClientFactoryTests.ThrowsIfConfigIsNull" type="ApplicationCore.Tests.Services.GitHubClientFactoryTests" method="ThrowsIfConfigIsNull" time="0.0130000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.GitHubClientFactoryTests.CreatesClient" type="ApplicationCore.Tests.Services.GitHubClientFactoryTests" method="CreatesClient" time="0.1590000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.GitHubClientFactoryTests.CreateClientThrowsWhenCalledWithoutGitHubToken" type="ApplicationCore.Tests.Services.GitHubClientFactoryTests" method="CreateClientThrowsWhenCalledWithoutGitHubToken" time="0.0160000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="2" passed="2" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Services.NoOpPullRequestTests" time="0.244">
+      <test name="ApplicationCore.Tests.Services.NoOpPullRequestTests.ConstructorThrowsIfLoggerIsNull" type="ApplicationCore.Tests.Services.NoOpPullRequestTests" method="ConstructorThrowsIfLoggerIsNull" time="0.0120000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.NoOpPullRequestTests.CreatePullRequestReturnsValidResult" type="ApplicationCore.Tests.Services.NoOpPullRequestTests" method="CreatePullRequestReturnsValidResult" time="0.2320000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="8" passed="8" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Services.PostCommentServiceTests" time="0.360">
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ThrowsIfFormIsNull" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ThrowsIfFormIsNull" time="0.2670000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ReturnsErrorResultIfCommentDoesNotComeFromSpecifiedWebsite(postedSite: null)" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ReturnsErrorResultIfCommentDoesNotComeFromSpecifiedWebsite" time="0.0090000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ReturnsErrorResultIfCommentDoesNotComeFromSpecifiedWebsite(postedSite: &quot;&quot;)" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ReturnsErrorResultIfCommentDoesNotComeFromSpecifiedWebsite" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ReturnsErrorResultIfCommentDoesNotComeFromSpecifiedWebsite(postedSite: &quot;http://www.example.org&quot;)" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ReturnsErrorResultIfCommentDoesNotComeFromSpecifiedWebsite" time="0.0010000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ReturnsErrorResultIfFormHasErrors" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ReturnsErrorResultIfFormHasErrors" time="0.0440000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ReturnsOkresultIfNoRedirectUriIsSpecified" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ReturnsOkresultIfNoRedirectUriIsSpecified" time="0.0070000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ReturnsRedirectResultIfRedirectIsSpecified" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ReturnsRedirectResultIfRedirectIsSpecified" time="0.0120000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PostCommentServiceTests.ReturnsErrorResultIfPullRequestFails" type="ApplicationCore.Tests.Services.PostCommentServiceTests" method="ReturnsErrorResultIfPullRequestFails" time="0.0190000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+    <collection total="3" passed="3" failed="0" skipped="0" name="Test collection for ApplicationCore.Tests.Services.PullRequestServiceTests" time="0.372">
+      <test name="ApplicationCore.Tests.Services.PullRequestServiceTests.ReturnsErrorResultIfNoRepositoryFound" type="ApplicationCore.Tests.Services.PullRequestServiceTests" method="ReturnsErrorResultIfNoRepositoryFound" time="0.2430000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PullRequestServiceTests.ThrowsIfCommentIsNull" type="ApplicationCore.Tests.Services.PullRequestServiceTests" method="ThrowsIfCommentIsNull" time="0.0110000" result="Pass">
+        <traits />
+      </test>
+      <test name="ApplicationCore.Tests.Services.PullRequestServiceTests.ReturnsEmptyResultIfSuccess" type="ApplicationCore.Tests.Services.PullRequestServiceTests" method="ReturnsEmptyResultIfSuccess" time="0.1180000" result="Pass">
+        <traits />
+      </test>
+    </collection>
+  </assembly>
+</assemblies>
