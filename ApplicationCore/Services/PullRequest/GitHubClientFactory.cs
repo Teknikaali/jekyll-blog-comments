@@ -1,4 +1,5 @@
-﻿using Octokit;
+﻿using System;
+using Octokit;
 
 namespace ApplicationCore
 {
@@ -8,7 +9,7 @@ namespace ApplicationCore
 
         public GitHubClientFactory(IWebConfigurator config)
         {
-            _config = config;
+            _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         public IGitHubClient CreateClient()
