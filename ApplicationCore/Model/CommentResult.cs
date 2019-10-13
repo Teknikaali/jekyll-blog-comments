@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ApplicationCore.Model;
 
-namespace ApplicationCore
+namespace ApplicationCore.Model
 {
     public class CommentResult
     {

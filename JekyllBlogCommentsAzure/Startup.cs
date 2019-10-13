@@ -1,6 +1,7 @@
 ﻿using System;
 using ApplicationCore;
 using ApplicationCore.Analytics;
+using ApplicationCore.Model;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

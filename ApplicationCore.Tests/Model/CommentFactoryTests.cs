@@ -5,7 +5,7 @@ using ApplicationCore.Model;
 using Moq;
 using Xunit;
 
-namespace ApplicationCore.Tests.Factories
+namespace ApplicationCore.Tests.Model
 {
     public class CommentFactoryTests
     {

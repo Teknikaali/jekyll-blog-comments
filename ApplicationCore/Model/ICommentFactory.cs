@@ -1,7 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Threading.Tasks;
 
-namespace ApplicationCore
+namespace ApplicationCore.Model
 {
     public interface ICommentFactory
     {

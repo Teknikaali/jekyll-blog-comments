@@ -6,7 +6,7 @@ using Octokit;
 using Xunit;
 using YamlDotNet.Serialization;
 
-namespace ApplicationCore.Tests
+namespace ApplicationCore.Tests.Services
 {
     public class PullRequestServiceTests
     {

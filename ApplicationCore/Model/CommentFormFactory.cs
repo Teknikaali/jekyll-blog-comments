@@ -1,7 +1,6 @@
 ﻿using System.Collections.Specialized;
-using ApplicationCore.Model;
 
-namespace ApplicationCore
+namespace ApplicationCore.Model
 {
     public class CommentFormFactory : ICommentFormFactory
     {

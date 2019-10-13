@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using ApplicationCore.Analytics;
 
-namespace ApplicationCore
+namespace ApplicationCore.Model
 {
     public class CommentFactory : ICommentFactory
     {

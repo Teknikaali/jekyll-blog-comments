@@ -1,7 +1,8 @@
 ﻿using System.Collections.Specialized;
+using ApplicationCore.Model;
 using Xunit;
 
-namespace ApplicationCore.Tests.Factories
+namespace ApplicationCore.Tests.Model
 {
     public class CommentFormFactoryTests
     {
