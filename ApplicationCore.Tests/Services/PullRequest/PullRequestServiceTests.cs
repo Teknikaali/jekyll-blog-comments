@@ -16,7 +16,8 @@ namespace ApplicationCore.Tests.Services
         public async Task ThrowsIfCommentIsNull()
         {
             var pullRequestService = new PullRequestService(
-                Mock.Of<IWebConfigurator>(),
+                new GitHubConfig(),
+                new CommentConfig(),
                 Mock.Of<ISerializer>(),
                 Mock.Of<IGitHubClient>());
 
@@ -28,16 +29,18 @@ namespace ApplicationCore.Tests.Services
         [Fact]
         public async Task ReturnsErrorResultIfNoRepositoryFound()
         {
-            var configMock = new Mock<IWebConfigurator>();
-            configMock.Setup(x => x.PullRequestRepository)
-                .Returns(_pullRequestRepository);
+            var gitHubConfig = new GitHubConfig
+            {
+                PullRequestRepository = _pullRequestRepository
+            };
 
             var gitHubClientMock = new Mock<IGitHubClient>();
             gitHubClientMock.Setup(x => x.Repository.Get(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<ApiException>();
 
             var pullRequestService = new PullRequestService(
-                configMock.Object,
+                gitHubConfig,
+                new CommentConfig(),
                 Mock.Of<ISerializer>(),
                 gitHubClientMock.Object);
 
@@ -54,9 +57,10 @@ namespace ApplicationCore.Tests.Services
         {
             var comment = new Comment("test-post-id", "This is a test message", "John Doe");
 
-            var configMock = new Mock<IWebConfigurator>();
-            configMock.Setup(x => x.PullRequestRepository)
-                .Returns(_pullRequestRepository);
+            var gitHubConfig = new GitHubConfig
+            {
+                PullRequestRepository = _pullRequestRepository
+            };
 
             var gitHubClientMock = new Mock<IGitHubClient>();
             gitHubClientMock.Setup(x => x.Repository.Get(It.IsAny<string>(), It.IsAny<string>()))
@@ -75,7 +79,8 @@ namespace ApplicationCore.Tests.Services
                 .Returns(comment.Message);
 
             var pullRequestService = new PullRequestService(
-                configMock.Object,
+                gitHubConfig,
+                new CommentConfig(),
                 serializerMock.Object,
                 gitHubClientMock.Object);
 

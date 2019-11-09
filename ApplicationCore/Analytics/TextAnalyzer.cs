@@ -13,24 +13,16 @@ namespace ApplicationCore.Analytics
     {
         private const int _splitTextLength = 500;
 
-        private readonly string _subscriptionKey;
-        private readonly string _region;
-        private readonly string _lang;
-
-        private readonly IWebConfigurator _config;
+        private readonly TextAnalyticsConfig _config;
         private readonly ITextAnalyticsClientFactory _textAnalyticsClientFactory;
 
-        public bool CanAnalyze => !string.IsNullOrEmpty(_subscriptionKey);
+        public bool CanAnalyze => !string.IsNullOrEmpty(_config.SubscriptionKey);
 
-        public TextAnalyzer(IWebConfigurator config, ITextAnalyticsClientFactory textAnalyticsClientFactory)
+        public TextAnalyzer(TextAnalyticsConfig config, ITextAnalyticsClientFactory textAnalyticsClientFactory)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _textAnalyticsClientFactory = textAnalyticsClientFactory
                 ?? throw new ArgumentNullException(nameof(textAnalyticsClientFactory));
-
-            _subscriptionKey = _config.TextAnalyticsSubscriptionKey;
-            _region = config.TextAnalyticsRegion;
-            _lang = config.TextAnalyticsLang;
         }
 
         public async Task<CommentResult> AnalyzeAsync(Comment comment)
@@ -46,7 +38,7 @@ namespace ApplicationCore.Analytics
 
             Comment analyzedComment;
 
-            using (var client = _textAnalyticsClientFactory.CreateClient(_subscriptionKey, _region))
+            using (var client = _textAnalyticsClientFactory.CreateClient(_config.SubscriptionKey, _config.Region))
             {
                 var result = await client.SentimentBatchAsync(
                     new MultiLanguageBatchInput(SplitFiveHundredChars(comment.Message).ToList()))
@@ -74,7 +66,7 @@ namespace ApplicationCore.Analytics
                 var multiLanguageInput = new MultiLanguageInput
                 {
                     Id = id.ToString(CultureInfo.InvariantCulture),
-                    Language = _lang
+                    Language = _config.Language
                 };
 
                 if((i + _splitTextLength) < input.Length)

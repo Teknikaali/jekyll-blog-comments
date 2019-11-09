@@ -3,8 +3,11 @@ using ApplicationCore;
 using ApplicationCore.Analytics;
 using ApplicationCore.Model;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
+using Microsoft.Azure.WebJobs.Host.Bindings;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 // To register the Configure method we need to specify the type name used during startup
 [assembly: FunctionsStartup(typeof(JekyllBlogCommentsAzure.Startup))]
@@ -22,20 +25,30 @@ namespace JekyllBlogCommentsAzure
 
             builder.Services.AddSingleton(CreatePostCommentService);
 
-            static IPostCommentService CreatePostCommentService(IServiceProvider serviceProvider)
+            IPostCommentService CreatePostCommentService(IServiceProvider serviceProvider)
             {
-                var config = new WebConfigurator();
+                var executionContextOptions = builder.Services.BuildServiceProvider()
+                    .GetService<IOptions<ExecutionContextOptions>>().Value;
+                var currentDirectory = executionContextOptions.AppDirectory;
+
+                var configRoot = new ConfigurationBuilder()
+                    .SetBasePath(currentDirectory)
+                    .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                    .AddEnvironmentVariables()
+                    .Build();
+
+                var config = new WebConfiguration(configRoot, new ConfigProvider());
+
                 var commentFactory = new CommentFactory(
                     new CommentFormFactory(),
-                    new TextAnalyzer(config, new TextAnalyticsClientFactory(new CredentialsFactory())));
-                var pullRequestService = config.PushToGitHub
-                    ? new PullRequestService(
-                        config,
+                    new TextAnalyzer(config.TextAnalytics, new TextAnalyticsClientFactory(new CredentialsFactory())));
+                var pullRequestService = new PullRequestService(
+                        config.GitHub,
+                        config.Comment,
                         new SerializerFactory().BuildSerializer(),
-                        new GitHubClientFactory(config).CreateClient()) as IPullRequestService
-                    : new NoOpPullRequestService(serviceProvider.GetService<ILoggerProvider>());
+                        new GitHubClientFactory(config.GitHub).CreateClient());
 
-                return new PostCommentService(config, commentFactory, pullRequestService);
+                return new PostCommentService(config.Comment, commentFactory, pullRequestService);
             }
         }
     }

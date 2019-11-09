@@ -11,20 +11,21 @@ namespace ApplicationCore.Tests.Services
     public class PostCommentServiceTests
     {
         private const string _website = "http://www.example.com/";
-        private readonly IWebConfigurator _config;
+        private readonly CommentConfig _config;
 
         public PostCommentServiceTests()
         {
-            var configMock = new Mock<IWebConfigurator>();
-            configMock.Setup(x => x.CommentWebsiteUrl).Returns(new Uri(_website));
-            _config = configMock.Object;
+            _config = new CommentConfig
+            {
+                WebsiteUrl = new Uri(_website)
+            };
         }
 
         [Fact]
         public async Task ThrowsIfFormIsNull()
         {
             var postCommentService = new PostCommentService(
-                Mock.Of<IWebConfigurator>(),
+                new CommentConfig(),
                 Mock.Of<ICommentFactory>(),
                 Mock.Of<IPullRequestService>());
 

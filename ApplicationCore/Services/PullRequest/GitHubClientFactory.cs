@@ -5,9 +5,9 @@ namespace ApplicationCore
 {
     public class GitHubClientFactory : IGitHubClientFactory
     {
-        private readonly IWebConfigurator _config;
+        private readonly GitHubConfig _config;
 
-        public GitHubClientFactory(IWebConfigurator config)
+        public GitHubClientFactory(GitHubConfig config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
@@ -17,7 +17,7 @@ namespace ApplicationCore
             return new GitHubClient(
                 new ProductHeaderValue("PostCommentToPullRequest"),
                     new Octokit.Internal.InMemoryCredentialStore(
-                        new Credentials(_config.GitHubToken)));
+                        new Credentials(_config.Token)));
         }
     }
 }

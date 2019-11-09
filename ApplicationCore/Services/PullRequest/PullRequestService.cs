@@ -8,13 +8,19 @@ namespace ApplicationCore
 {
     public class PullRequestService : IPullRequestService
     {
-        private readonly IWebConfigurator _config;
+        private readonly GitHubConfig _gitHubConfig;
+        private readonly CommentConfig _commentConfig;
         private readonly ISerializer _serializer;
         private readonly IGitHubClient _github;
 
-        public PullRequestService(IWebConfigurator config, ISerializer serializer, IGitHubClient github)
+        public PullRequestService(
+            GitHubConfig gitHubConfig,
+            CommentConfig commentConfig,
+            ISerializer serializer,
+            IGitHubClient github)
         {
-            _config = config;
+            _gitHubConfig = gitHubConfig;
+            _commentConfig = commentConfig;
             _serializer = serializer;
             _github = github;
         }
@@ -27,7 +33,7 @@ namespace ApplicationCore
             }
 
             // Get a reference to our GitHub repository
-            var repoOwnerName = _config.PullRequestRepository.Split('/');
+            var repoOwnerName = _gitHubConfig.PullRequestRepository.Split('/');
             Repository repository;
 
             try
@@ -56,7 +62,7 @@ namespace ApplicationCore
             {
                 Committer = new Committer(
                     comment.Name,
-                    comment.Email ?? _config.CommentFallbackCommitEmail ?? "redacted@example.com",
+                    comment.Email ?? _commentConfig.FallbackCommitEmailAddress.ToString(),
                     comment.Date)
             };
             await _github.Repository.Content.CreateFile(

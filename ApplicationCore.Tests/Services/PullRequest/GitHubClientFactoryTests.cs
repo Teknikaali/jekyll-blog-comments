@@ -15,10 +15,7 @@ namespace ApplicationCore.Tests.Services
         [Fact]
         public void CreatesClient()
         {
-            var configMock = new Mock<IWebConfigurator>();
-            configMock.Setup(x => x.GitHubToken)
-                .Returns("GitHubTestToken");
-            var factory = new GitHubClientFactory(configMock.Object);
+            var factory = new GitHubClientFactory(new GitHubConfig { Token = "GitHubTestToken" });
 
             Assert.NotNull(factory.CreateClient());
         }
@@ -26,10 +23,9 @@ namespace ApplicationCore.Tests.Services
         [Fact]
         public void CreateClientThrowsWhenCalledWithoutGitHubToken()
         {
-            var configMock = new Mock<IWebConfigurator>();
-            var factory = new GitHubClientFactory(configMock.Object);
+            var factory = new GitHubClientFactory(new GitHubConfig());
 
-            Assert.Throws<ArgumentNullException>(() => factory.CreateClient());
+            Assert.Throws<ArgumentException>(() => factory.CreateClient());
         }
     }
 }

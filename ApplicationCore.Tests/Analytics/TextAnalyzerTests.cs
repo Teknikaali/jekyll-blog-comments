@@ -21,9 +21,10 @@ namespace ApplicationCore.Tests.Analytics
         [MemberData(nameof(SentimentScoreTestCases))]
         public async Task AnalyzesSentimentScore(string message, double? score)
         {
-            var configMock = new Mock<IWebConfigurator>();
-            configMock.Setup(x => x.TextAnalyticsSubscriptionKey)
-                .Returns(_validSubscriptionKey);
+            var config = new TextAnalyticsConfig
+            {
+                SubscriptionKey = _validSubscriptionKey
+            };
 
             // SentimentBatchAsync extension method uses SentimentWithHttpMessagesAsync internally and mocking
             // extension methods with Moq isn't currently possible. Extension methods are "hard dependencies" that 
@@ -48,7 +49,7 @@ namespace ApplicationCore.Tests.Analytics
             textAnalyticsClientFactoryMock.Setup(x => x.CreateClient(It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(textAnalyticsClientMock.Object);
             
-            ITextAnalyzer textAnalyzer = new TextAnalyzer(configMock.Object, textAnalyticsClientFactoryMock.Object);
+            ITextAnalyzer textAnalyzer = new TextAnalyzer(config, textAnalyticsClientFactoryMock.Object);
 
             var comment = new Comment("test-post-id", message, "John Doe");
             var analyzedComment = await textAnalyzer.AnalyzeAsync(comment).ConfigureAwait(false);
@@ -67,15 +68,16 @@ namespace ApplicationCore.Tests.Analytics
         [Fact]
         public async Task ReturnsCommentIntactIfNotAnalyzed()
         {
-            var configMock = new Mock<IWebConfigurator>();
-            configMock.Setup(x => x.TextAnalyticsSubscriptionKey)
-                .Returns(_invalidSubscriptionKey);
+            var config = new TextAnalyticsConfig
+            {
+                SubscriptionKey = _invalidSubscriptionKey
+            };
 
             var textAnalyticsClientFactoryMock = new Mock<ITextAnalyticsClientFactory>
             {
                 DefaultValue = DefaultValue.Mock
             };
-            ITextAnalyzer textAnalyzer = new TextAnalyzer(configMock.Object, textAnalyticsClientFactoryMock.Object);
+            ITextAnalyzer textAnalyzer = new TextAnalyzer(config, textAnalyticsClientFactoryMock.Object);
 
             var comment = new Comment("test-post-id", new string('*', 555), "John Doe");
             var result = await textAnalyzer.AnalyzeAsync(comment).ConfigureAwait(false);
@@ -88,11 +90,13 @@ namespace ApplicationCore.Tests.Analytics
         [InlineData(_validSubscriptionKey, true)]
         public void CanAnalyzeOnlyIfValidSubscriptionKeyIsProvided(string subscriptionKey, bool expectedResult)
         {
-            var configMock = new Mock<IWebConfigurator>();
-            configMock.Setup(x => x.TextAnalyticsSubscriptionKey).Returns(subscriptionKey);
+            var config = new TextAnalyticsConfig
+            {
+                SubscriptionKey = subscriptionKey
+            };
 
             var textAnalyticsClientFactoryMock = new Mock<ITextAnalyticsClientFactory>();
-            var textAnalyzer = new TextAnalyzer(configMock.Object, textAnalyticsClientFactoryMock.Object);
+            var textAnalyzer = new TextAnalyzer(config, textAnalyticsClientFactoryMock.Object);
 
             Assert.Equal(expectedResult, textAnalyzer.CanAnalyze);
         }
@@ -101,7 +105,7 @@ namespace ApplicationCore.Tests.Analytics
         public void ThrowsIfConstructorDependenciesAreInvalid()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new TextAnalyzer(Mock.Of<IWebConfigurator>(), null!));
+                () => new TextAnalyzer(new TextAnalyticsConfig(), null!));
             Assert.Throws<ArgumentNullException>(
                 () => new TextAnalyzer(null!, Mock.Of<ITextAnalyticsClientFactory>()));
         }
@@ -109,7 +113,7 @@ namespace ApplicationCore.Tests.Analytics
         [Fact]
         public async Task ThrowsIfTryingToAnalyzeNullComment()
         {
-            var textAnalyzer = new TextAnalyzer(Mock.Of<IWebConfigurator>(), Mock.Of<ITextAnalyticsClientFactory>());
+            var textAnalyzer = new TextAnalyzer(new TextAnalyticsConfig(), Mock.Of<ITextAnalyticsClientFactory>());
             
             await Assert.ThrowsAsync<ArgumentNullException>(() => textAnalyzer.AnalyzeAsync(null!))
                 .ConfigureAwait(false);
