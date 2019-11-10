@@ -80,7 +80,7 @@ namespace ApplicationCore.Tests.Services
 
             var pullRequestService = new PullRequestService(
                 gitHubConfig,
-                new CommentConfig(),
+                new CommentConfig("http://www.example.com", "redracted@example.com"),
                 serializerMock.Object,
                 gitHubClientMock.Object);
 

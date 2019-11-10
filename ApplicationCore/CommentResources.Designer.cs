@@ -70,6 +70,15 @@ namespace ApplicationCore {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Provided email address &apos;{0}&apos; is invalid..
+        /// </summary>
+        internal static string FallbackCommitEmailInvalidErrorMessage {
+            get {
+                return ResourceManager.GetString("FallbackCommitEmailInvalidErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; cannot be converted to type &apos;{1}&apos;.
         /// </summary>
         internal static string InvalidTypeConversionErrorMessage {
@@ -93,6 +102,15 @@ namespace ApplicationCore {
         internal static string NoOpPullRequestSkipped {
             get {
                 return ResourceManager.GetString("NoOpPullRequestSkipped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Provided website uri &apos;{0}&apos; is invalid..
+        /// </summary>
+        internal static string WebsiteInvalidUriErrorMessage {
+            get {
+                return ResourceManager.GetString("WebsiteInvalidUriErrorMessage", resourceCulture);
             }
         }
     }

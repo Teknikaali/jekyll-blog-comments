@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using ApplicationCore.Model;
 using Xunit;
 
@@ -39,6 +40,64 @@ namespace ApplicationCore.Tests.Model
             Assert.True(
                 commentForm.HasErrors,
                 $"Comment form should have errors. Errors: {FormatErrors(commentForm.Errors)}");
+        }
+
+        [Fact]
+        public void EmailIsValidated()
+        {
+            var invalidEmail = "InvalidEmail";
+            var form = new NameValueCollection
+            {
+                { "postId", "this-is-a-post-slug" },
+                { "message", "This is the message" },
+                { "name", "My Name" },
+                { "email", invalidEmail }
+            };
+            var commentForm = new CommentForm(form);
+
+            Assert.Single(commentForm.Errors);
+        }
+
+        [Fact]
+        public void CreatesCommentFromValidForm()
+        {
+            var form = new NameValueCollection
+            {
+                { "postId", "this-is-a-post-slug" },
+                { "message", "This is the message" },
+                { "name", "My Name" },
+            };
+            var commentForm = new CommentForm(form);
+            var result = commentForm.TryCreateComment();
+
+            Assert.Empty(result.Errors);
+        }
+
+        [Fact]
+        public void CreatesEmptyCommentFromInvalidForm()
+        {
+            var form = new NameValueCollection();
+            var commentForm = new CommentForm(form);
+            var result = commentForm.TryCreateComment();
+
+            Assert.NotEmpty(result.Errors);
+        }
+
+        [Fact]
+        public void FailingTypeConversionOnOptionalFieldReturnsError()
+        {
+            // UriTypeConverter will fail, if the uri string is longer than 65519 characters
+            var form = new NameValueCollection
+            {
+                { "postId", "this-is-a-post-slug" },
+                { "message", "This is the message" },
+                { "name", "My Name" },
+                { "url", new string('A', 65520) }
+            };
+            var commentForm = new CommentForm(form);
+
+            Assert.NotEmpty(commentForm.Errors);
+            Assert.Single(commentForm.Errors);
         }
 
         public static IEnumerable<object[]> ValidFormValues()

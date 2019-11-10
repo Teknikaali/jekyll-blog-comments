@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
-namespace ApplicationCore.Tests
+namespace ApplicationCore.Configuration.Tests
 {
     public class WebConfiguratorTests
     {
@@ -23,11 +23,7 @@ namespace ApplicationCore.Tests
         [MemberData(nameof(TestCases))]
         public void ReturnsConfigurationValue(ConfigurationTestCase testCase)
         {
-            var commentConfig = new CommentConfig
-            {
-                FallbackCommitEmailAddress = new MailAddress(_fallbackCommitEmail),
-                WebsiteUrl = new Uri(_websiteUrl)
-            };
+            var commentConfig = new CommentConfig(_websiteUrl, _fallbackCommitEmail);
             var gitHubConfig = new GitHubConfig
             {
                 PullRequestRepository = _pullRequestRepository,
@@ -49,12 +45,20 @@ namespace ApplicationCore.Tests
                 .Returns(gitHubConfig);
             configProviderMock.Setup(x => x.GetConfig<TextAnalyticsConfig>(It.IsAny<IConfigurationRoot>()))
                 .Returns(textAnalyticsConfig);
-            var webConfigurator = new WebConfiguration(configRootMock.Object, configProviderMock.Object);
+            var config = new WebConfiguration(configRootMock.Object, configProviderMock.Object);
 
-            var root = typeof(IWebConfiguration).GetProperty(testCase.RootName).GetValue(webConfigurator);
+            var root = typeof(IWebConfiguration).GetProperty(testCase.RootName).GetValue(config);
             var result = root.GetType().GetProperty(testCase.PropertyName).GetValue(root);
 
             Assert.Equal(testCase.ObjectValue, result);
+        }
+
+        [Fact]
+        public void InvalidProvidedValueThrows()
+        {
+            Assert.Throws<ArgumentException>(() => new CommentConfig(_websiteUrl, ""));
+            Assert.Throws<ArgumentException>(() => new CommentConfig("", _fallbackCommitEmail));
+            Assert.Throws<ArgumentException>(() => new CommentConfig("WrongFormat", _fallbackCommitEmail));
         }
 
         public static IEnumerable<object[]> TestCases()
