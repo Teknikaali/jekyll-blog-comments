@@ -65,10 +65,7 @@ namespace ApplicationCore.Model
         {
             if (IsRequiredField())
             {
-                return new FormField(
-                    parameterInfo.Name,
-                    TypeDescriptor.GetConverter(parameterInfo.ParameterType).ConvertFrom(fieldValue),
-                    isRequired: true);
+                return new FormField(TypeDescriptor.GetConverter(parameterInfo.ParameterType).ConvertFrom(fieldValue));
             }
             else if (IsOptionalField())
             {
@@ -79,33 +76,29 @@ namespace ApplicationCore.Model
                     if (converter.IsValid(fieldValue))
                     {
                         var convertedValue = converter.ConvertFrom(fieldValue);
-                        return new FormField(parameterInfo.Name, convertedValue, isRequired: false);
+                        return new FormField(convertedValue);
                     }
                     else
                     {
-                        return new FormField(
-                            parameterInfo.Name,
-                            string.Format(
-                                CultureInfo.InvariantCulture,
-                                CommentResources.InvalidTypeConversionErrorMessage,
-                                fieldValue,
-                                parameterInfo.ParameterType.ToString()));
+                        return new FormField(string.Format(
+                            CultureInfo.InvariantCulture,
+                            CommentResources.InvalidTypeConversionErrorMessage,
+                            fieldValue,
+                            parameterInfo.ParameterType.ToString()));
                     }
                 }
                 else
                 {
-                    return new FormField(parameterInfo.Name, parameterInfo.DefaultValue, isRequired: false);
+                    return new FormField(parameterInfo.DefaultValue);
                 }
             }
             else
             {
                 // Field is required but missing a value
-                return new FormField(
-                    parameterInfo.Name,
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        CommentResources.MissingRequiredValueErrorMessage,
-                        parameterInfo.Name));
+                return new FormField(string.Format(
+                    CultureInfo.InvariantCulture,
+                    CommentResources.MissingRequiredValueErrorMessage,
+                    parameterInfo.Name));
             }
 
             bool IsRequiredField() => !string.IsNullOrWhiteSpace(fieldValue) && !parameterInfo.HasDefaultValue;
