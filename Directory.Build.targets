@@ -1,0 +1,13 @@
+<Project DefaultTargets="Coverage">
+	<PropertyGroup>
+		<IsTestProject>$(MSBuildProjectName.Contains('Tests'))</IsTestProject>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(IsTestProject)' == 'true'">
+		<UseSourceLink>true</UseSourceLink>
+		<CoverletOutputFormat>opencover</CoverletOutputFormat>
+			<Exclude>[xunit.*]*</Exclude>
+		<CoverletOutput>$(MSBuildThisFileDirectory)BuildReports/Projects/$(AssemblyName)/</CoverletOutput>
+	</PropertyGroup>
+	
+</Project>

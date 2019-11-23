@@ -19,7 +19,8 @@ namespace JekyllBlogCommentsAzure
         }
 
         [FunctionName("PostComment")]
-        public async Task<HttpResponseMessage> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestMessage request)
+        public async Task<HttpResponseMessage> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestMessage request)
         {
             if (request is null)
             {
@@ -34,9 +35,11 @@ namespace JekyllBlogCommentsAzure
             {
                 result = await _postCommentService.PostCommentAsync(form).ConfigureAwait(false);
             }
-#pragma warning disable CA1031 // Do not catch general exception types
             catch (Exception e)
-#pragma warning restore CA1031 // Do not catch general exception types
+            when (e is ArgumentException ||
+                  e is ArgumentNullException ||
+                  e is InvalidOperationException ||
+                  e is NullReferenceException)
             {
                 result = new PostCommentResult(HttpStatusCode.BadRequest, $"Posting comment failed: {e.Message}", e);
             }
@@ -55,7 +58,9 @@ namespace JekyllBlogCommentsAzure
                     {
                         if(result.Exception != null)
                         {
-                            return request.CreateErrorResponse(result.HttpStatusCode, new HttpError(result.Exception, includeErrorDetail: true) { Message = result.Error });
+                            return request.CreateErrorResponse(
+                                result.HttpStatusCode,
+                                new HttpError(result.Exception, includeErrorDetail: true) { Message = result.Error });
                         }
                         else
                         {
@@ -64,5 +69,7 @@ namespace JekyllBlogCommentsAzure
                     }
             }
         }
+
+
     }
 }
