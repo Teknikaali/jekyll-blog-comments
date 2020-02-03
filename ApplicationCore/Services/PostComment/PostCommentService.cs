@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 using ApplicationCore.Model;
+using Microsoft.AspNetCore.Http;
 
 namespace ApplicationCore
 {
@@ -23,7 +23,7 @@ namespace ApplicationCore
             _pullRequestService = pullRequestService;
         }
 
-        public async Task<PostCommentResult> PostCommentAsync(NameValueCollection form)
+        public async Task<PostCommentResult> PostCommentAsync(IFormCollection form)
         {
             if (form is null)
             {
@@ -40,7 +40,7 @@ namespace ApplicationCore
                     string.Format(
                         CultureInfo.InvariantCulture,
                         CommentResources.AreNotSameSitesErrorMessage,
-                        postedSite));
+                        postedSite.ToString() ?? "null"));
             }
 
             var commentResult = await _commentFactory.CreateFromFormAsync(form).ConfigureAwait(false);
@@ -51,7 +51,7 @@ namespace ApplicationCore
 
                 if (!pullRequestResult.HasError)
                 {
-                    if (!Uri.TryCreate(form["redirect"], UriKind.Absolute, out var redirectUri))
+                    if (!Uri.TryCreate(form["Redirect"], UriKind.Absolute, out var redirectUri))
                     {
                         return new PostCommentResult(HttpStatusCode.OK);
                     }

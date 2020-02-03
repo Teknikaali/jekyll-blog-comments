@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using ApplicationCore.Model;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using Xunit;
 
@@ -39,15 +39,15 @@ namespace ApplicationCore.Tests.Services
         [InlineData("http://www.example.org")]
         public async Task ReturnsErrorResultIfCommentDoesNotComeFromSpecifiedWebsite(string postedSite)
         {
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["CommentSite"]).Returns(postedSite);
+
             var postCommentService = new PostCommentService(
                 _config,
                 Mock.Of<ICommentFactory>(),
                 Mock.Of<IPullRequestService>());
 
-            var errorResult = await postCommentService.PostCommentAsync(new NameValueCollection
-            {
-                { "CommentSite", postedSite }
-            }).ConfigureAwait(false);
+            var errorResult = await postCommentService.PostCommentAsync(formMock.Object).ConfigureAwait(false);
 
             Assert.NotEmpty(errorResult.Error);
             Assert.Equal(HttpStatusCode.BadRequest, errorResult.HttpStatusCode);
@@ -58,21 +58,21 @@ namespace ApplicationCore.Tests.Services
         {
             var errorMessage = "ErrorBecauseOfReasons";
             var commentFactoryMock = new Mock<ICommentFactory>();
-            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<NameValueCollection>()))
+            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<IFormCollection>()))
                 .ReturnsAsync(new CommentResult(new Comment(string.Empty, string.Empty, string.Empty), new string[]
                 {
                     errorMessage
                 }));
+
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["CommentSite"]).Returns(_website);
 
             var postCommentService = new PostCommentService(
                _config,
                commentFactoryMock.Object,
                Mock.Of<IPullRequestService>());
 
-            var errorResult = await postCommentService.PostCommentAsync(new NameValueCollection
-            {
-                { "CommentSite", _website }
-            }).ConfigureAwait(false);
+            var errorResult = await postCommentService.PostCommentAsync(formMock.Object).ConfigureAwait(false);
 
             Assert.NotEmpty(errorResult.Error);
             Assert.Equal(HttpStatusCode.BadRequest, errorResult.HttpStatusCode);
@@ -83,7 +83,7 @@ namespace ApplicationCore.Tests.Services
         public async Task ReturnsErrorResultIfPullRequestFails()
         {
             var commentFactoryMock = new Mock<ICommentFactory>();
-            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<NameValueCollection>()))
+            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<IFormCollection>()))
                 .ReturnsAsync(new CommentResult(new Comment(string.Empty, string.Empty, string.Empty)));
 
             var errorMessage = "ErrorBecauseOfReasons";
@@ -91,15 +91,15 @@ namespace ApplicationCore.Tests.Services
             pullRequestServiceMock.Setup(x => x.TryCreatePullRequestAsync(It.IsAny<Comment>()))
                 .ReturnsAsync(new PullRequestResult(errorMessage));
 
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["CommentSite"]).Returns(_website);
+
             var postCommentService = new PostCommentService(
                _config,
                commentFactoryMock.Object,
                pullRequestServiceMock.Object);
 
-            var errorResult = await postCommentService.PostCommentAsync(new NameValueCollection
-            {
-                { "CommentSite", _website }
-            }).ConfigureAwait(false);
+            var errorResult = await postCommentService.PostCommentAsync(formMock.Object).ConfigureAwait(false);
 
             Assert.NotEmpty(errorResult.Error);
             Assert.Equal(HttpStatusCode.BadRequest, errorResult.HttpStatusCode);
@@ -110,22 +110,22 @@ namespace ApplicationCore.Tests.Services
         public async Task ReturnsOkresultIfNoRedirectUriIsSpecified()
         {
             var commentFactoryMock = new Mock<ICommentFactory>();
-            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<NameValueCollection>()))
+            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<IFormCollection>()))
                 .ReturnsAsync(new CommentResult(new Comment(string.Empty, string.Empty, string.Empty)));
 
             var pullRequestServiceMock = new Mock<IPullRequestService>();
             pullRequestServiceMock.Setup(x => x.TryCreatePullRequestAsync(It.IsAny<Comment>()))
                 .ReturnsAsync(new PullRequestResult());
 
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["CommentSite"]).Returns(_website);
+
             var postCommentService = new PostCommentService(
                _config,
                commentFactoryMock.Object,
                pullRequestServiceMock.Object);
 
-            var okResult = await postCommentService.PostCommentAsync(new NameValueCollection
-            {
-                { "CommentSite", _website }
-            }).ConfigureAwait(false);
+            var okResult = await postCommentService.PostCommentAsync(formMock.Object).ConfigureAwait(false);
 
             Assert.Equal(HttpStatusCode.OK, okResult.HttpStatusCode);
             Assert.Empty(okResult.Error);
@@ -135,23 +135,23 @@ namespace ApplicationCore.Tests.Services
         public async Task ReturnsRedirectResultIfRedirectIsSpecified()
         {
             var commentFactoryMock = new Mock<ICommentFactory>();
-            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<NameValueCollection>()))
+            commentFactoryMock.Setup(x => x.CreateFromFormAsync(It.IsAny<IFormCollection>()))
                 .ReturnsAsync(new CommentResult(new Comment(string.Empty, string.Empty, string.Empty)));
 
             var pullRequestServiceMock = new Mock<IPullRequestService>();
             pullRequestServiceMock.Setup(x => x.TryCreatePullRequestAsync(It.IsAny<Comment>()))
                 .ReturnsAsync(new PullRequestResult());
 
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["CommentSite"]).Returns(_website);
+            formMock.Setup(x => x["Redirect"]).Returns(_website);
+
             var postCommentService = new PostCommentService(
                _config,
                commentFactoryMock.Object,
                pullRequestServiceMock.Object);
 
-            var redirectResult = await postCommentService.PostCommentAsync(new NameValueCollection
-            {
-                { "CommentSite", _website },
-                { "Redirect", _website }
-            }).ConfigureAwait(false);
+            var redirectResult = await postCommentService.PostCommentAsync(formMock.Object).ConfigureAwait(false);
 
             Assert.Empty(redirectResult.Error);
             Assert.Equal(HttpStatusCode.Redirect, redirectResult.HttpStatusCode);

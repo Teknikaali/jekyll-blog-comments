@@ -1,7 +1,7 @@
-﻿using System.Collections.Specialized;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ApplicationCore.Analytics;
 using ApplicationCore.Model;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using Xunit;
 
@@ -24,7 +24,7 @@ namespace ApplicationCore.Tests.Model
                 .Returns(nonAnalyzedComment);
 
             var commentFormFactoryMock = new Mock<ICommentFormFactory>();
-            commentFormFactoryMock.Setup(x => x.CreateCommentForm(It.IsAny<NameValueCollection>()))
+            commentFormFactoryMock.Setup(x => x.CreateCommentForm(It.IsAny<IFormCollection>()))
                 .Returns(commentFormMock.Object);
 
             var textAnalyzerMock = new Mock<ITextAnalyzer>();
@@ -37,7 +37,7 @@ namespace ApplicationCore.Tests.Model
                 commentFormFactoryMock.Object,
                 textAnalyzerMock.Object);
 
-            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection())
+            var actualComment = await commentFactory.CreateFromFormAsync(Mock.Of<IFormCollection>())
                 .ConfigureAwait(false);
 
             Assert.Equal(analyzedComment, actualComment);
@@ -60,7 +60,7 @@ namespace ApplicationCore.Tests.Model
                 .Returns(nonAnalyzedComment);
 
             var commentFormFactoryMock = new Mock<ICommentFormFactory>();
-            commentFormFactoryMock.Setup(x => x.CreateCommentForm(It.IsAny<NameValueCollection>()))
+            commentFormFactoryMock.Setup(x => x.CreateCommentForm(It.IsAny<IFormCollection>()))
                 .Returns(commentFormMock.Object);
 
             var textAnalyzerMock = new Mock<ITextAnalyzer>();
@@ -73,7 +73,7 @@ namespace ApplicationCore.Tests.Model
                 commentFormFactoryMock.Object,
                 textAnalyzerMock.Object);
 
-            var actualComment = await commentFactory.CreateFromFormAsync(new NameValueCollection())
+            var actualComment = await commentFactory.CreateFromFormAsync(Mock.Of<IFormCollection>())
                 .ConfigureAwait(false);
 
             Assert.Equal(nonAnalyzedComment, actualComment);

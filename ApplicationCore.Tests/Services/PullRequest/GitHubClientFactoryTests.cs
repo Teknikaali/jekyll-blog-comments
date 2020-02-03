@@ -1,5 +1,6 @@
 ﻿using System;
 using Moq;
+using Octokit;
 using Xunit;
 
 namespace ApplicationCore.Tests.Services
@@ -21,11 +22,13 @@ namespace ApplicationCore.Tests.Services
         }
 
         [Fact]
-        public void CreateClientThrowsWhenCalledWithoutGitHubToken()
+        public void UsesAnonymousCredentialsWhenGitHubTokenIsNotAvailable()
         {
             var factory = new GitHubClientFactory(new GitHubConfig());
 
-            Assert.Throws<ArgumentException>(() => factory.CreateClient());
+            var client = factory.CreateClient();
+
+            Assert.Equal(Credentials.Anonymous, client.Connection.Credentials);
         }
     }
 }

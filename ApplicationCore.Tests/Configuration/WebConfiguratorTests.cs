@@ -47,8 +47,14 @@ namespace ApplicationCore.Configuration.Tests
                 .Returns(textAnalyticsConfig);
             var config = new WebConfiguration(configRootMock.Object, configProviderMock.Object);
 
-            var root = typeof(IWebConfiguration).GetProperty(testCase.RootName).GetValue(config);
-            var result = root.GetType().GetProperty(testCase.PropertyName).GetValue(root);
+            var rootProperty = typeof(IWebConfiguration).GetProperty(testCase.RootName)
+                ?? throw new NullReferenceException($"Root \"{testCase.RootName}\" couldn't be found.");
+            var root = rootProperty.GetValue(config)
+                ?? throw new NullReferenceException($"Couldn't get value of \"{rootProperty.Name}\".");
+            
+            var resultProperty = root.GetType().GetProperty(testCase.PropertyName)
+                ?? throw new NullReferenceException($"Property \"{testCase.PropertyName}\" couldn't be found.");
+            var result = resultProperty.GetValue(root);
 
             Assert.Equal(testCase.ObjectValue, result);
         }

@@ -14,10 +14,13 @@ namespace ApplicationCore
 
         public IGitHubClient CreateClient()
         {
+            var credentials = _config.Token.Length > 0
+                ? new Credentials(_config.Token)
+                : Credentials.Anonymous;
+
             return new GitHubClient(
                 new ProductHeaderValue("PostCommentToPullRequest"),
-                    new Octokit.Internal.InMemoryCredentialStore(
-                        new Credentials(_config.Token)));
+                new Octokit.Internal.InMemoryCredentialStore(credentials));
         }
     }
 }

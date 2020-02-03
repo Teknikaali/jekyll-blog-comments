@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using ApplicationCore.Model;
+using Microsoft.AspNetCore.Http;
+using Moq;
 using Xunit;
 
 namespace ApplicationCore.Tests.Model
@@ -10,15 +11,16 @@ namespace ApplicationCore.Tests.Model
     {
         [Theory]
         [MemberData(nameof(ValidFormValues))]
-        public void ValidFormShouldNotHaveErrors(MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> testCase)
+        public void ValidFormShouldNotHaveErrors(
+            MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> testCase)
         {
-            var form = new NameValueCollection();
+            var formMock = new Mock<IFormCollection>();
             foreach (var fieldValuePair in testCase.TestCase)
             {
-                form.Add(fieldValuePair.Key, fieldValuePair.Value);
+                formMock.Setup(x => x[fieldValuePair.Key]).Returns(fieldValuePair.Value);
             }
 
-            var commentForm = new CommentForm(form);
+            var commentForm = new CommentForm(formMock.Object);
 
             Assert.False(
                 commentForm.HasErrors,
@@ -27,15 +29,16 @@ namespace ApplicationCore.Tests.Model
 
         [Theory]
         [MemberData(nameof(InvalidFormValues))]
-        public void InvalidFormShouldHaveErrors(MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> testCase)
+        public void InvalidFormShouldHaveErrors(
+            MemberDataSerializer<IEnumerable<KeyValuePair<string, string>>> testCase)
         {
-            var form = new NameValueCollection();
+            var formMock = new Mock<IFormCollection>();
             foreach (var fieldValuePair in testCase.TestCase)
             {
-                form.Add(fieldValuePair.Key, fieldValuePair.Value);
+                formMock.Setup(x => x[fieldValuePair.Key]).Returns(fieldValuePair.Value);
             }
 
-            var commentForm = new CommentForm(form);
+            var commentForm = new CommentForm(formMock.Object);
 
             Assert.True(
                 commentForm.HasErrors,
@@ -46,14 +49,13 @@ namespace ApplicationCore.Tests.Model
         public void EmailIsValidated()
         {
             var invalidEmail = "InvalidEmail";
-            var form = new NameValueCollection
-            {
-                { "postId", "this-is-a-post-slug" },
-                { "message", "This is the message" },
-                { "name", "My Name" },
-                { "email", invalidEmail }
-            };
-            var commentForm = new CommentForm(form);
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["postId"]).Returns("this-is-a-post-slug");
+            formMock.Setup(x => x["message"]).Returns("This is the message");
+            formMock.Setup(x => x["name"]).Returns("My Name");
+            formMock.Setup(x => x["email"]).Returns(invalidEmail);
+
+            var commentForm = new CommentForm(formMock.Object);
 
             Assert.Single(commentForm.Errors);
         }
@@ -61,13 +63,12 @@ namespace ApplicationCore.Tests.Model
         [Fact]
         public void CreatesCommentFromValidForm()
         {
-            var form = new NameValueCollection
-            {
-                { "postId", "this-is-a-post-slug" },
-                { "message", "This is the message" },
-                { "name", "My Name" },
-            };
-            var commentForm = new CommentForm(form);
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["postId"]).Returns("this-is-a-post-slug");
+            formMock.Setup(x => x["message"]).Returns("This is the message");
+            formMock.Setup(x => x["name"]).Returns("My Name");
+            
+            var commentForm = new CommentForm(formMock.Object);
             var result = commentForm.TryCreateComment();
 
             Assert.Empty(result.Errors);
@@ -76,8 +77,8 @@ namespace ApplicationCore.Tests.Model
         [Fact]
         public void CreatesEmptyCommentFromInvalidForm()
         {
-            var form = new NameValueCollection();
-            var commentForm = new CommentForm(form);
+            var formMock = new Mock<IFormCollection>();
+            var commentForm = new CommentForm(formMock.Object);
             var result = commentForm.TryCreateComment();
 
             Assert.NotEmpty(result.Errors);
@@ -87,14 +88,14 @@ namespace ApplicationCore.Tests.Model
         public void FailingTypeConversionOnOptionalFieldReturnsError()
         {
             // UriTypeConverter will fail, if the uri string is longer than 65519 characters
-            var form = new NameValueCollection
-            {
-                { "postId", "this-is-a-post-slug" },
-                { "message", "This is the message" },
-                { "name", "My Name" },
-                { "url", new string('A', 65520) }
-            };
-            var commentForm = new CommentForm(form);
+
+            var formMock = new Mock<IFormCollection>();
+            formMock.Setup(x => x["postId"]).Returns("this-is-a-post-slug");
+            formMock.Setup(x => x["message"]).Returns("This is the message");
+            formMock.Setup(x => x["name"]).Returns("My Name");
+            formMock.Setup(x => x["url"]).Returns(new string('A', 65520));
+
+            var commentForm = new CommentForm(formMock.Object);
 
             Assert.NotEmpty(commentForm.Errors);
             Assert.Single(commentForm.Errors);

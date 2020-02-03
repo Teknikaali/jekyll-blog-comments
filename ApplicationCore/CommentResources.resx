@@ -132,6 +132,12 @@
   <data name="NoOpPullRequestSkipped" xml:space="preserve">
     <value>Creating a pull request was skipped because of NoOpPullRequestService was used</value>
   </data>
+  <data name="ParameterCannotBeNull" xml:space="preserve">
+    <value>Parameter {0} cannot be null.</value>
+  </data>
+  <data name="PostCommentExceptionMessage" xml:space="preserve">
+    <value>Posting comment failed in exception. Reason: {0}</value>
+  </data>
   <data name="WebsiteInvalidUriErrorMessage" xml:space="preserve">
     <value>Provided website uri '{0}' is invalid.</value>
   </data>

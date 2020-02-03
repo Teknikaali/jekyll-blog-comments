@@ -1,10 +1,10 @@
-﻿using System.Collections.Specialized;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace ApplicationCore
 {
     public interface IPostCommentService
     {
-        Task<PostCommentResult> PostCommentAsync(NameValueCollection form);
+        Task<PostCommentResult> PostCommentAsync(IFormCollection form);
     }
 }

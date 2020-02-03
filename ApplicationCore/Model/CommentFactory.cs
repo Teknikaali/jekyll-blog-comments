@@ -1,6 +1,6 @@
-﻿using System.Collections.Specialized;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using ApplicationCore.Analytics;
+using Microsoft.AspNetCore.Http;
 
 namespace ApplicationCore.Model
 {
@@ -15,7 +15,7 @@ namespace ApplicationCore.Model
             _textAnalyzer = textAnalyzer;
         }
 
-        public async Task<CommentResult> CreateFromFormAsync(NameValueCollection form)
+        public async Task<CommentResult> CreateFromFormAsync(IFormCollection form)
         {
             var commentForm = _commentFormFactory.CreateCommentForm(form);
             var commentResult = commentForm.TryCreateComment();

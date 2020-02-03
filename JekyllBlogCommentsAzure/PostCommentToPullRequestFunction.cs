@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http;
 using ApplicationCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Extensions.Logging;
 
 namespace JekyllBlogCommentsAzure
 {
@@ -19,57 +20,37 @@ namespace JekyllBlogCommentsAzure
         }
 
         [FunctionName("PostComment")]
-        public async Task<HttpResponseMessage> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestMessage request)
+        public async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequest request,
+            ILogger logger)
         {
             if (request is null)
             {
-                throw new ArgumentNullException(nameof(request));
+                logger.LogError(CommentResources.ParameterCannotBeNull, nameof(request));
+                return new BadRequestResult();
             }
-
-            var form = await request.Content.ReadAsFormDataAsync().ConfigureAwait(false);
-
-            PostCommentResult result;
 
             try
             {
-                result = await _postCommentService.PostCommentAsync(form).ConfigureAwait(false);
+                var form = await request.ReadFormAsync().ConfigureAwait(false);
+                var result = await _postCommentService.PostCommentAsync(form).ConfigureAwait(false);
+
+                switch (result.HttpStatusCode)
+                {
+                    case HttpStatusCode.OK:
+                        return new OkResult();
+                    case HttpStatusCode.Redirect:
+                        return new RedirectResult(result.RedirectUrl?.AbsoluteUri);
+                    default:
+                        logger.LogError(result.Exception, result.Error);
+                        return new BadRequestResult();
+                }
             }
             catch (Exception e)
-            when (e is ArgumentException ||
-                  e is ArgumentNullException ||
-                  e is InvalidOperationException ||
-                  e is NullReferenceException)
             {
-                result = new PostCommentResult(HttpStatusCode.BadRequest, $"Posting comment failed: {e.Message}", e);
-            }
-
-            switch (result.HttpStatusCode)
-            {
-                case HttpStatusCode.OK:
-                    return request.CreateResponse(HttpStatusCode.OK);
-                case HttpStatusCode.Redirect:
-                    {
-                        var response = request.CreateResponse(HttpStatusCode.Redirect);
-                        response.Headers.Location = result.RedirectUrl;
-                        return response;
-                    }
-                default:
-                    {
-                        if(result.Exception != null)
-                        {
-                            return request.CreateErrorResponse(
-                                result.HttpStatusCode,
-                                new HttpError(result.Exception, includeErrorDetail: true) { Message = result.Error });
-                        }
-                        else
-                        {
-                            return request.CreateErrorResponse(result.HttpStatusCode, result.Error);
-                        }
-                    }
+                logger.LogError(e, CommentResources.PostCommentExceptionMessage, e.Message);
+                throw;
             }
         }
-
-
     }
 }

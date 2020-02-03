@@ -1,9 +1,9 @@
-﻿using System.Collections.Specialized;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace ApplicationCore.Model
 {
     public interface ICommentFormFactory
     {
-        ICommentForm CreateCommentForm(NameValueCollection form);
+        ICommentForm CreateCommentForm(IFormCollection form);
     }
 }

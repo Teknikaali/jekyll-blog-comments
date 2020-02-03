@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Http;
 
 namespace ApplicationCore.Model
 {
@@ -23,7 +23,7 @@ namespace ApplicationCore.Model
 
         public bool HasErrors => Errors.Any();
 
-        public CommentForm(NameValueCollection form)
+        public CommentForm(IFormCollection form)
         {
             _constructor = typeof(Comment).GetConstructors()[0];
 

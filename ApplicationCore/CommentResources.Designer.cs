@@ -22,7 +22,7 @@ namespace ApplicationCore {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class CommentResources {
+    public class CommentResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace ApplicationCore {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ApplicationCore.CommentResources", typeof(CommentResources).Assembly);
@@ -51,7 +51,7 @@ namespace ApplicationCore {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace ApplicationCore {
         /// <summary>
         ///   Looks up a localized string similar to This Jekyll comments receiever does not handle forms for &apos;{0}&apos;. You should point to your own instance.
         /// </summary>
-        internal static string AreNotSameSitesErrorMessage {
+        public static string AreNotSameSitesErrorMessage {
             get {
                 return ResourceManager.GetString("AreNotSameSitesErrorMessage", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace ApplicationCore {
         /// <summary>
         ///   Looks up a localized string similar to Provided email address &apos;{0}&apos; is invalid..
         /// </summary>
-        internal static string FallbackCommitEmailInvalidErrorMessage {
+        public static string FallbackCommitEmailInvalidErrorMessage {
             get {
                 return ResourceManager.GetString("FallbackCommitEmailInvalidErrorMessage", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace ApplicationCore {
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; cannot be converted to type &apos;{1}&apos;.
         /// </summary>
-        internal static string InvalidTypeConversionErrorMessage {
+        public static string InvalidTypeConversionErrorMessage {
             get {
                 return ResourceManager.GetString("InvalidTypeConversionErrorMessage", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace ApplicationCore {
         /// <summary>
         ///   Looks up a localized string similar to Required form value &apos;{0}&apos; is missing.
         /// </summary>
-        internal static string MissingRequiredValueErrorMessage {
+        public static string MissingRequiredValueErrorMessage {
             get {
                 return ResourceManager.GetString("MissingRequiredValueErrorMessage", resourceCulture);
             }
@@ -99,16 +99,34 @@ namespace ApplicationCore {
         /// <summary>
         ///   Looks up a localized string similar to Creating a pull request was skipped because of NoOpPullRequestService was used.
         /// </summary>
-        internal static string NoOpPullRequestSkipped {
+        public static string NoOpPullRequestSkipped {
             get {
                 return ResourceManager.GetString("NoOpPullRequestSkipped", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter {0} cannot be null..
+        /// </summary>
+        public static string ParameterCannotBeNull {
+            get {
+                return ResourceManager.GetString("ParameterCannotBeNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Posting comment failed in exception. Reason: {0}.
+        /// </summary>
+        public static string PostCommentExceptionMessage {
+            get {
+                return ResourceManager.GetString("PostCommentExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Provided website uri &apos;{0}&apos; is invalid..
         /// </summary>
-        internal static string WebsiteInvalidUriErrorMessage {
+        public static string WebsiteInvalidUriErrorMessage {
             get {
                 return ResourceManager.GetString("WebsiteInvalidUriErrorMessage", resourceCulture);
             }
