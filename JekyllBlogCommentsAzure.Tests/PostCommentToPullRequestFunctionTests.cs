@@ -15,12 +15,20 @@ namespace JekyllBlogCommentsAzure.Tests
     public class PostCommentToPullRequestFunctionTests
     {
         [Fact]
-        public void ThrowsWhenRequestIsNull()
+        public async Task LogsAndReturnsBadRequestIfRequestIsNull()
         {
             var serviceMock = new Mock<IPostCommentService>();
             var function = new PostCommentToPullRequestFunction(serviceMock.Object);
+            var loggerMock = new Mock<ILogger>();
 
-            Assert.ThrowsAsync<ArgumentNullException>(() => function.Run(null!, Mock.Of<ILogger>()));
+            var result = await function.Run(null!, loggerMock.Object).ConfigureAwait(false);
+            Assert.IsType<BadRequestResult>(result);
+            loggerMock.Verify(x => x.Log(
+                    LogLevel.Error,
+                    0,
+                    It.IsAny<object>(),
+                    It.IsAny<Exception>(),
+                    It.IsAny<Func<object, Exception, string>>()));
         }
 
         [Fact]
@@ -38,21 +46,24 @@ namespace JekyllBlogCommentsAzure.Tests
 
         [Theory]
         [MemberData(nameof(FailingCommentExceptions))]
-        public async Task ReturnsBadRequestIfPostingCommentFails(Exception exception)
+        public async Task LogsAndReturnsBadRequestIfPostingCommentFails(Exception exception)
         {
             var serviceMock = new Mock<IPostCommentService>();
             serviceMock.Setup(x => x.PostCommentAsync(It.IsAny<IFormCollection>()))
                 .ReturnsAsync(new PostCommentResult(HttpStatusCode.BadRequest, exception?.Message!, exception!));
 
             var formMock = new Mock<IFormCollection>();
-            var request = new Mock<HttpRequest>();
-            request.Setup(x => x.ReadFormAsync(It.IsAny<CancellationToken>()))
+            var requestMock = new Mock<HttpRequest>();
+            requestMock.Setup(x => x.ReadFormAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(formMock.Object);
-
+            var loggerMock = new Mock<ILogger>();
             var function = new PostCommentToPullRequestFunction(serviceMock.Object);
 
-            var result = await function.Run(request.Object, Mock.Of<ILogger>()).ConfigureAwait(false);
+            var result = await function.Run(requestMock.Object, loggerMock.Object).ConfigureAwait(false);
+            
             Assert.IsType<BadRequestResult>(result);
+            loggerMock.Verify(x =>
+                x.Log(LogLevel.Error, 0, It.IsAny<object>(), exception, It.IsAny<Func<object, Exception, string>>()));
         }
 
         [Fact]

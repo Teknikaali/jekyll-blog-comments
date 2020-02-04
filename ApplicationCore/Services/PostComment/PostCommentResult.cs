@@ -5,7 +5,6 @@ namespace ApplicationCore
 {
     public class PostCommentResult
     {
-        public bool HasError => !string.IsNullOrEmpty(Error);
         public HttpStatusCode HttpStatusCode { get; }
         public Uri? RedirectUrl { get; }
         public string Error { get; }

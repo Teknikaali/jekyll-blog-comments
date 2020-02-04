@@ -28,7 +28,7 @@ namespace ApplicationCore.Model
             _constructor = typeof(Comment).GetConstructors()[0];
 
             _fields = _constructor.GetParameters().ToDictionary(
-                p => p.Name ?? throw new NullReferenceException("Constructor parameter name was null."),
+                p => p.Name!,
                 p => TryConvertFormFieldValue(form[p.Name], p));
 
             var errors = _fields
