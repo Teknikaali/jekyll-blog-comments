@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace ApplicationCore
 {
     /// <summary>
-    /// Service that only logs the request to create a new pull request without actually creating a pull request
+    /// Service that only logs the request to create a new pull request without actually creating a pull request.
     /// </summary>
     public class NoOpPullRequestService : IPullRequestService
     {

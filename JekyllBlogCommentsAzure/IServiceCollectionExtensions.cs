@@ -10,6 +10,11 @@ namespace JekyllBlogCommentsAzure
 {
     public static class IServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds and configures the required <see cref="IPostCommentService"/> to enable the function to post comments.
+        /// </summary>
+        /// <param name="services">Container for a collection of service providers</param>
+        /// <returns><paramref name="services"/> collection</returns>
         public static IServiceCollection AddPostCommentService(this IServiceCollection services)
         {
             var executionContextOptions = services.BuildServiceProvider()

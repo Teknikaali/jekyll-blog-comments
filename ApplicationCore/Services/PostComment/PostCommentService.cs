@@ -30,7 +30,7 @@ namespace ApplicationCore
                 throw new ArgumentNullException(nameof(form));
             }
 
-            //Make sure the site posting the comment is the correct site.
+            // Make sure the site posting the comment is the correct site.
             var allowedSite = _config.WebsiteUrl.AbsoluteUri;
             var postedSite = form["CommentSite"]; // TODO: fix magic string
             if (!string.IsNullOrWhiteSpace(allowedSite) && !AreSameSites(allowedSite, postedSite))

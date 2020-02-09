@@ -20,6 +20,9 @@ namespace ApplicationCore.Model
 
         public string Id { get; }
 
+        /// <summary>
+        /// The comment's creation date
+        /// </summary>
         public DateTime Date { get; }
 
         public string Name { get; }
@@ -30,9 +33,15 @@ namespace ApplicationCore.Model
 
         public string Score { get; }
 
+        /// <summary>
+        /// Optional Uri to the image/resource to be used as the user's profile avatar
+        /// </summary>
         [YamlMember(SerializeAs = typeof(string))]
         public Uri? Avatar { get; }
 
+        /// <summary>
+        /// Optional Uri for the user's website
+        /// </summary>
         [YamlMember(SerializeAs = typeof(string))]
         public Uri? Url { get; }
 

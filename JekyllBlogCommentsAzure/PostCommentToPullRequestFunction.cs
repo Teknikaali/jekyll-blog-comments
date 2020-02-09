@@ -10,10 +10,17 @@ using Microsoft.Extensions.Logging;
 
 namespace JekyllBlogCommentsAzure
 {
+    /// <summary>
+    /// Azure Function that posts input form as a comment to a repository.
+    /// </summary>
     public class PostCommentToPullRequestFunction
     {
         private readonly IPostCommentService _postCommentService;
 
+        /// <summary>
+        /// Create new Function that posts comments
+        /// </summary>
+        /// <param name="postCommentService">Comment posting service. This does the actual work.</param>
         public PostCommentToPullRequestFunction(IPostCommentService postCommentService)
         {
             _postCommentService = postCommentService;
