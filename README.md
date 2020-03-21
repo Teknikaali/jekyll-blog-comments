@@ -6,12 +6,6 @@ The app includes just one function:
 
 * `PostComment` - receives form POST submission and creates a PR to add the comment to your Jekyll site
 
-## Code coverage status
-
-[![Branch coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_branchcoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/) [![Line coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_linecoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/)
-
-Coverage reports are located in the [gh-pages branch](https://github.com/Teknikaali/jekyll-blog-comments/tree/gh-pages). Click the badge to see the full coverage report.
-
 # Customizations
 
 This repository is a heavily modified version of the original:
@@ -19,12 +13,18 @@ This repository is a heavily modified version of the original:
 * Heavily uses Dependency Injection to make code more testable
 * Adds xUnit unit test and code coverage reporting with Coverlet + ReportGenerator
 
+## Code coverage status
+
+[![Branch coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_branchcoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/) [![Line coverage](https://github.com/Teknikaali/jekyll-blog-comments/blob/gh-pages/badge_linecoverage.svg?raw=true&sanitize=true)](https://teknikaali.github.io/jekyll-blog-comments/)
+
+Coverage reports are located in the [gh-pages branch](https://github.com/Teknikaali/jekyll-blog-comments/tree/gh-pages). Click the badge to see the full coverage report.
+
 ## Setup
 
 To set this up, you'll need to have an [Azure Portal account](https://portal.azure.com).
 
 1. Fork this repository
-2. [Create a **v2** Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-azure-function)
+2. [Create a **v3** Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/functions-create-first-azure-function)
 3. [Create subscription key in Microsoft Azure Recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account) **optional**
 4. [Set up your function to deploy from your fork](https://docs.microsoft.com/en-us/azure/azure-functions/scripts/functions-cli-create-function-app-github-continuous)
 5. Set up the following [App Settings for your Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings)
@@ -38,3 +38,22 @@ To set this up, you'll need to have an [Azure Portal account](https://portal.azu
 | `SentimentAnalysis.SubscriptionKey` | Subscription Key for Microsoft Azure Recognition, if you don't want to use, just leave empty.
 | `SentimentAnalysis.Region` | Region for your Subscription key (E.g.: westus)
 | `SentimentAlaysis.Lang` | Language for comment, [find lang code here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/language-support)
+
+Example of `local.settings.json`:
+```
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+  },
+  "CommentConfig": {
+    "WebsiteUrl": "https://example.com",
+    "FallbackCommitEmail": "redacted@example.com"
+  },
+  "GitHubConfig": {
+    "Token": "TestToken",
+    "PullRequestRepository": "YourAlias/yourRepository"
+  }
+}
+```
