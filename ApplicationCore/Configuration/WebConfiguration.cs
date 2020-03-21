@@ -35,14 +35,14 @@ namespace ApplicationCore
     {
         public Uri WebsiteUrl { get; set; } = null!;
 
-        public MailAddress FallbackCommitEmailAddress => new MailAddress(FallbackCommitEmail);
-
         /// <summary>
         /// <see cref="MailAddress"/> is non-serializable. This property is used as a proxy when
         /// <see cref="BinderOptions.BindNonPublicProperties"/> is set to <c>true</c> and when binding the section to
         /// the actual config instance.
         /// </summary>
         private string FallbackCommitEmail { get; set; } = "";
+
+        public MailAddress FallbackCommitEmailAddress => new MailAddress(FallbackCommitEmail);
 
         public CommentConfig() { }
 
