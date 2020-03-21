@@ -18,8 +18,8 @@ namespace ApplicationCore.Tests.Services
             var pullRequestService = new PullRequestService(
                 new GitHubConfig(),
                 new CommentConfig(),
-                Mock.Of<ISerializer>(),
-                Mock.Of<IGitHubClient>());
+                Mock.Of<ISerializerFactory>(),
+                Mock.Of<IGitHubClientFactory>());
 
             await Assert.ThrowsAsync<ArgumentNullException>(
                 () => pullRequestService.TryCreatePullRequestAsync(null!))
@@ -35,14 +35,17 @@ namespace ApplicationCore.Tests.Services
             };
 
             var gitHubClientMock = new Mock<IGitHubClient>();
+            var gitHubClientFactoryMock = new Mock<IGitHubClientFactory>();
+            gitHubClientFactoryMock.Setup(x => x.CreateClient())
+                .Returns(gitHubClientMock.Object);
             gitHubClientMock.Setup(x => x.Repository.Get(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws<ApiException>();
 
             var pullRequestService = new PullRequestService(
                 gitHubConfig,
                 new CommentConfig(),
-                Mock.Of<ISerializer>(),
-                gitHubClientMock.Object);
+                Mock.Of<ISerializerFactory>(),
+                gitHubClientFactoryMock.Object);
 
             var result = await pullRequestService.TryCreatePullRequestAsync(
                 new Comment(string.Empty, string.Empty, string.Empty))
@@ -73,16 +76,21 @@ namespace ApplicationCore.Tests.Services
                 .ReturnsAsync(new RepositoryContentChangeSet());
             gitHubClientMock.Setup(x => x.Repository.PullRequest.Create(It.IsAny<long>(), It.IsAny<NewPullRequest>()))
                 .ReturnsAsync(new PullRequest());
+            var gitHubClientFactoryMock = new Mock<IGitHubClientFactory>();
+            gitHubClientFactoryMock.Setup(x => x.CreateClient())
+                .Returns(gitHubClientMock.Object);
 
             var serializerMock = new Mock<ISerializer>();
             serializerMock.Setup(x => x.Serialize(It.IsAny<object>()))
                 .Returns(comment.Message);
+            var serializerFactoryMock = new Mock<ISerializerFactory>();
+            serializerFactoryMock.Setup(x => x.BuildSerializer()).Returns(serializerMock.Object);
 
             var pullRequestService = new PullRequestService(
                 gitHubConfig,
                 new CommentConfig("http://www.example.com", "redracted@example.com"),
-                serializerMock.Object,
-                gitHubClientMock.Object);
+                serializerFactoryMock.Object,
+                gitHubClientFactoryMock.Object);
 
             var result = await pullRequestService.TryCreatePullRequestAsync(comment).ConfigureAwait(false);
 

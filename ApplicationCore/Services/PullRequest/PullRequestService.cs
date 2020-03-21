@@ -16,13 +16,23 @@ namespace ApplicationCore
         public PullRequestService(
             GitHubConfig gitHubConfig,
             CommentConfig commentConfig,
-            ISerializer serializer,
-            IGitHubClient github)
+            ISerializerFactory serializerFactory,
+            IGitHubClientFactory githubFactory)
         {
-            _gitHubConfig = gitHubConfig;
-            _commentConfig = commentConfig;
-            _serializer = serializer;
-            _github = github;
+            if (serializerFactory is null)
+            {
+                throw new ArgumentNullException(nameof(serializerFactory));
+            }
+
+            if (githubFactory is null)
+            {
+                throw new ArgumentNullException(nameof(githubFactory));
+            }
+
+            _gitHubConfig = gitHubConfig ?? throw new ArgumentNullException(nameof(gitHubConfig));
+            _commentConfig = commentConfig ?? throw new ArgumentNullException(nameof(commentConfig));
+            _serializer = serializerFactory.BuildSerializer();
+            _github = githubFactory.CreateClient();
         }
 
         public async Task<PullRequestResult> TryCreatePullRequestAsync(Comment comment)

@@ -8,6 +8,9 @@ using Microsoft.Extensions.Options;
 
 namespace JekyllBlogCommentsAzure
 {
+    /// <summary>
+    /// Enables a simple way to add the <seealso cref="PostCommentService"/> to a <seealso cref="ServiceCollection"/>.
+    /// </summary>
     public static class IServiceCollectionExtensions
     {
         /// <summary>
@@ -35,8 +38,8 @@ namespace JekyllBlogCommentsAzure
             var pullRequestService = new PullRequestService(
                     config.GitHub,
                     config.Comment,
-                    new SerializerFactory().BuildSerializer(),
-                    new GitHubClientFactory(config.GitHub).CreateClient());
+                    new SerializerFactory(),
+                    new GitHubClientFactory(config.GitHub));
 
             var postCommentService = new PostCommentService(config.Comment, commentFactory, pullRequestService);
             services.AddSingleton<IPostCommentService>(postCommentService);
