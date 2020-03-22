@@ -12,6 +12,7 @@ This repository is a heavily modified version of the original:
 * Core functionality has been moved to a different project file making the PostComment just a thin passthrough layer
 * Heavily uses Dependency Injection to make code more testable
 * Adds xUnit unit test and code coverage reporting with Coverlet + ReportGenerator
+* Automatically deploy to Azure
 
 ## Code coverage status
 
