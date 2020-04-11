@@ -13,12 +13,12 @@ namespace ApplicationCore.Analytics
     {
         private const int _splitTextLength = 500;
 
-        private readonly TextAnalyticsConfig _config;
+        private readonly WebConfiguration _config;
         private readonly ITextAnalyticsClientFactory _textAnalyticsClientFactory;
 
-        public bool CanAnalyze => !string.IsNullOrEmpty(_config.SubscriptionKey);
+        public bool CanAnalyze => !string.IsNullOrEmpty(_config.TextAnalyticsSubscriptionKey);
 
-        public TextAnalyzer(TextAnalyticsConfig config, ITextAnalyticsClientFactory textAnalyticsClientFactory)
+        public TextAnalyzer(WebConfiguration config, ITextAnalyticsClientFactory textAnalyticsClientFactory)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
             _textAnalyticsClientFactory = textAnalyticsClientFactory
@@ -38,7 +38,7 @@ namespace ApplicationCore.Analytics
 
             Comment analyzedComment;
 
-            using (var client = _textAnalyticsClientFactory.CreateClient(_config.SubscriptionKey, _config.Region))
+            using (var client = _textAnalyticsClientFactory.CreateClient(_config.TextAnalyticsSubscriptionKey, _config.TextAnalyticsRegion))
             {
                 var result = await client.SentimentBatchAsync(
                     new MultiLanguageBatchInput(SplitFiveHundredChars(comment.Message).ToList()))
@@ -66,7 +66,7 @@ namespace ApplicationCore.Analytics
                 var multiLanguageInput = new MultiLanguageInput
                 {
                     Id = id.ToString(CultureInfo.InvariantCulture),
-                    Language = _config.Language
+                    Language = _config.TextAnalyticsLanguage
                 };
 
                 if((i + _splitTextLength) < input.Length)

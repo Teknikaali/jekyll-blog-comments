@@ -30,18 +30,18 @@ namespace JekyllBlogCommentsAzure
                 .AddEnvironmentVariables()
                 .Build();
 
-            var config = new WebConfiguration(configRoot, new ConfigProvider());
+            var config = new WebConfiguration();
+            configRoot.GetSection("Values").Bind(config);
 
             var commentFactory = new CommentFactory(
                 new CommentFormFactory(),
-                new TextAnalyzer(config.TextAnalytics, new TextAnalyticsClientFactory(new CredentialsFactory())));
+                new TextAnalyzer(config, new TextAnalyticsClientFactory(new CredentialsFactory())));
             var pullRequestService = new PullRequestService(
-                    config.GitHub,
-                    config.Comment,
+                    config,
                     new SerializerFactory(),
-                    new GitHubClientFactory(config.GitHub));
+                    new GitHubClientFactory(config));
 
-            var postCommentService = new PostCommentService(config.Comment, commentFactory, pullRequestService);
+            var postCommentService = new PostCommentService(config, commentFactory, pullRequestService);
             services.AddSingleton<IPostCommentService>(postCommentService);
 
             return services;

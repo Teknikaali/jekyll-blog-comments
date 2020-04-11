@@ -16,8 +16,7 @@ namespace ApplicationCore.Tests.Services
         public async Task ThrowsIfCommentIsNull()
         {
             var pullRequestService = new PullRequestService(
-                new GitHubConfig(),
-                new CommentConfig(),
+                new WebConfiguration(),
                 Mock.Of<ISerializerFactory>(),
                 Mock.Of<IGitHubClientFactory>());
 
@@ -29,7 +28,7 @@ namespace ApplicationCore.Tests.Services
         [Fact]
         public async Task ReturnsErrorResultIfNoRepositoryFound()
         {
-            var gitHubConfig = new GitHubConfig
+            var config = new WebConfiguration
             {
                 PullRequestRepository = _pullRequestRepository
             };
@@ -42,8 +41,7 @@ namespace ApplicationCore.Tests.Services
                 .Throws<ApiException>();
 
             var pullRequestService = new PullRequestService(
-                gitHubConfig,
-                new CommentConfig(),
+                config,
                 Mock.Of<ISerializerFactory>(),
                 gitHubClientFactoryMock.Object);
 
@@ -60,9 +58,11 @@ namespace ApplicationCore.Tests.Services
         {
             var comment = new Comment("test-post-id", "This is a test message", "John Doe");
 
-            var gitHubConfig = new GitHubConfig
+            var config = new WebConfiguration
             {
-                PullRequestRepository = _pullRequestRepository
+                PullRequestRepository = _pullRequestRepository,
+                Website = "http://www.example.com",
+                FallbackCommitEmail = "redacted@example.com"
             };
 
             var gitHubClientMock = new Mock<IGitHubClient>();
@@ -87,8 +87,7 @@ namespace ApplicationCore.Tests.Services
             serializerFactoryMock.Setup(x => x.BuildSerializer()).Returns(serializerMock.Object);
 
             var pullRequestService = new PullRequestService(
-                gitHubConfig,
-                new CommentConfig("http://www.example.com", "redracted@example.com"),
+                config,
                 serializerFactoryMock.Object,
                 gitHubClientFactoryMock.Object);
 

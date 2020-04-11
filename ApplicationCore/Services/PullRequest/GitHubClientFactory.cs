@@ -5,17 +5,17 @@ namespace ApplicationCore
 {
     public class GitHubClientFactory : IGitHubClientFactory
     {
-        private readonly GitHubConfig _config;
+        private readonly WebConfiguration _config;
 
-        public GitHubClientFactory(GitHubConfig config)
+        public GitHubClientFactory(WebConfiguration config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
         }
 
         public IGitHubClient CreateClient()
         {
-            var credentials = _config.Token.Length > 0
-                ? new Credentials(_config.Token)
+            var credentials = _config.GitHubToken.Length > 0
+                ? new Credentials(_config.GitHubToken)
                 : Credentials.Anonymous;
 
             return new GitHubClient(

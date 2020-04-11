@@ -9,12 +9,12 @@ namespace ApplicationCore
 {
     public class PostCommentService : IPostCommentService
     {
-        private readonly CommentConfig _config;
+        private readonly WebConfiguration _config;
         private readonly ICommentFactory _commentFactory;
         private readonly IPullRequestService _pullRequestService;
 
         public PostCommentService(
-            CommentConfig config,
+            WebConfiguration config,
             ICommentFactory commentFactory,
             IPullRequestService pullRequestService)
         {
@@ -31,8 +31,8 @@ namespace ApplicationCore
             }
 
             // Make sure the site posting the comment is the correct site.
-            var allowedSite = _config.WebsiteUrl.AbsoluteUri;
-            var postedSite = form["CommentSite"]; // TODO: fix magic string
+            var allowedSite = _config.Website;
+            var postedSite = form[FormFields.CommentSite];
             if (!string.IsNullOrWhiteSpace(allowedSite) && !AreSameSites(allowedSite, postedSite))
             {
                 return new PostCommentResult(

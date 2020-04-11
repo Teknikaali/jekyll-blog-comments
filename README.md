@@ -30,31 +30,35 @@ To set this up, you'll need to have an [Azure Portal account](https://portal.azu
 4. [Set up your function to deploy from your fork](https://docs.microsoft.com/en-us/azure/azure-functions/scripts/functions-cli-create-function-app-github-continuous)
 5. Set up the following [App Settings for your Azure Function](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-azure-function-app-settings)
 
-| Setting | Value
-| -------- | -------
-| `PullRequestRepository` | `owner/name` of the repository that houses your Jekyll site for pull requests to be created against. For example, `haacked/haacked.com` will post to https://github.com/haacked/haacked.com
-| `GitHubToken` | A [GitHub personal access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) with access to edit your target repository.
-| `CommentWebsiteUrl` | The URL to the website that hosts the comments. This is used to make sure the correct site is posting comments to the receiver.
-| `CommentFallbackCommitEmail` | The email address to use for GitHub commits and PR's if the form does not supply one.
-| `SentimentAnalysis.SubscriptionKey` | Subscription Key for Microsoft Azure Recognition, if you don't want to use, just leave empty.
-| `SentimentAnalysis.Region` | Region for your Subscription key (E.g.: westus)
-| `SentimentAlaysis.Lang` | Language for comment, [find lang code here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/language-support)
+| Setting | Value | Required
+| -------- | ------- | ---
+| `PullRequestRepository` | `owner/name` of the repository that houses your Jekyll site for pull requests to be created against. For example, `haacked/haacked.com` will post to https://github.com/haacked/haacked.com | *
+| `GitHubToken` | A [GitHub personal access token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) with access to edit your target repository. | *
+| `Website` | The URL to the website that hosts the comments. This is used to make sure the correct site is posting comments to the receiver. | *
+| `FallbackCommitEmail` | The email address to use for GitHub commits and PR's if the form does not supply one.
+| `TextAnalyticsSubscriptionKey` | Subscription Key for Microsoft Azure Recognition, if you don't want to use, just leave empty.
+| `TextAnalyticsRegion` | Region for your Subscription key (E.g.: westus)
+| `TextAnalyticsLanguage` | Language for comment, [find lang code here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/language-support)
 
-Example of `local.settings.json`:
+
+## Local development
+
+* You'll need add `local.settings.json` to `JekyllBlogCommentsAzure` and `JekyllBlogCommentsAzure.Tests` projects as these configuration files are excluded from Git with .gitignore.
+** Example of `local.settings.json`:
 ```
 {
   "IsEncrypted": false,
   "Values": {
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true"
-  },
-  "CommentConfig": {
-    "WebsiteUrl": "https://example.com",
-    "FallbackCommitEmail": "redacted@example.com"
-  },
-  "GitHubConfig": {
-    "Token": "TestToken",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "Website": "https://example.com",
+    "FallbackCommitEmail": "redacted@example.com",
+    "GitHubToken": "TestToken",
     "PullRequestRepository": "YourAlias/yourRepository"
   }
 }
 ```
+*Note*: with this example configuration you can't commit/push because of the invalid GitHub token.
+* Run/Debug `JekyllBlogCommentsAzure` project
+* You can test in local environment by using Postman (or similar REST client)
+** Local Postman environment and an example collection has been provided inside `Postman`-folder

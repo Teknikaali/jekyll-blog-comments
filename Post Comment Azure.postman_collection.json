@@ -1,0 +1,105 @@
+{
+	"info": {
+		"_postman_id": "03f0289e-8e47-432f-97de-980fc1ae5781",
+		"name": "Post Comment Azure",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PostComment (local)",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7ed676a3-8df0-4a7b-aeca-b0566c0bf0d4",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "PostId",
+							"value": "my-very-first-test-post",
+							"type": "text"
+						},
+						{
+							"key": "Message",
+							"value": "Test message",
+							"type": "text"
+						},
+						{
+							"key": "Name",
+							"value": "My First Name",
+							"type": "text"
+						},
+						{
+							"key": "CommentSite",
+							"value": "{{comment-site}}",
+							"type": "text"
+						},
+						{
+							"key": "Email",
+							"value": "foo@example.com",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:7071/api/PostComment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7071",
+					"path": [
+						"api",
+						"PostComment"
+					]
+				},
+				"description": "Posts a test comment"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d9771b30-8c1a-4aa2-b469-1f627ec086a5",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "cec68380-e948-4eae-b4b3-df67aa8e699b",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
