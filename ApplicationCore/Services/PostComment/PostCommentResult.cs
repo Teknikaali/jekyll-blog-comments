@@ -6,8 +6,11 @@ namespace ApplicationCore
     public class PostCommentResult
     {
         public HttpStatusCode HttpStatusCode { get; }
+
         public Uri? RedirectUrl { get; }
+
         public string Error { get; }
+
         public Exception? Exception { get; }
 
         public PostCommentResult(HttpStatusCode httpStatusCode, string error)
@@ -22,7 +25,7 @@ namespace ApplicationCore
         
         }
 
-        public PostCommentResult(HttpStatusCode httpStatusCode, string error, Exception exception)
+        public PostCommentResult(HttpStatusCode httpStatusCode, string error, Exception? exception)
             : this(httpStatusCode, error)
         {
             Exception = exception;

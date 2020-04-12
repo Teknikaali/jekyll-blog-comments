@@ -62,7 +62,8 @@ namespace ApplicationCore.Tests.Services
                 .ReturnsAsync(new CommentResult(new Comment(string.Empty, string.Empty, string.Empty), new string[]
                 {
                     errorMessage
-                }));
+                },
+                new InvalidOperationException()));
 
             var formMock = new Mock<IFormCollection>();
             formMock.Setup(x => x["CommentSite"]).Returns(_website);
@@ -89,7 +90,7 @@ namespace ApplicationCore.Tests.Services
             var errorMessage = "ErrorBecauseOfReasons";
             var pullRequestServiceMock = new Mock<IPullRequestService>();
             pullRequestServiceMock.Setup(x => x.TryCreatePullRequestAsync(It.IsAny<Comment>()))
-                .ReturnsAsync(new PullRequestResult(errorMessage));
+                .ReturnsAsync(new PullRequestResult(new Exception(errorMessage)));
 
             var formMock = new Mock<IFormCollection>();
             formMock.Setup(x => x["CommentSite"]).Returns(_website);

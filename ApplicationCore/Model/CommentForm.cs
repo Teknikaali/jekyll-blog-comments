@@ -57,7 +57,11 @@ namespace ApplicationCore.Model
             }
             else
             {
-                return new CommentResult(new Comment(string.Empty, string.Empty, string.Empty), Errors);
+                return new CommentResult(
+                    new Comment(string.Empty, string.Empty, string.Empty),
+                    Errors,
+                    new InvalidOperationException(
+                        $"Couldn't create comment result. Reasons: {string.Join(',', Errors)}"));
             }
         }
 

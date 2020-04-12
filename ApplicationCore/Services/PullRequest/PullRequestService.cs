@@ -48,9 +48,13 @@ namespace ApplicationCore
                 repository = await _github.Repository.Get(repoOwnerName[0], repoOwnerName[1])
                     .ConfigureAwait(false);
             }
+            catch (IndexOutOfRangeException e)
+            {
+                return new PullRequestResult(e);
+            }
             catch (ApiException e)
             {
-                return new PullRequestResult(e.Message);
+                return new PullRequestResult(e);
             }
 
             // Create a new branch from the default branch

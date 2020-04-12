@@ -95,5 +95,39 @@ namespace ApplicationCore.Tests.Services
 
             Assert.False(result.HasError);
         }
+
+        [Fact]
+        public async Task ReturnsErrorResultIfRepositoryNotFound()
+        {
+            var comment = new Comment("postId", "message", "name");
+
+            var gitHubClientMock = new Mock<IGitHubClient>();
+            gitHubClientMock.Setup(x => x.Repository.Get(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new Repository());
+
+            var gitHubClientFactoryMock = new Mock<IGitHubClientFactory>();
+            gitHubClientFactoryMock.Setup(x => x.CreateClient())
+                .Returns(gitHubClientMock.Object);
+
+            var serializerMock = new Mock<ISerializer>();
+            serializerMock.Setup(x => x.Serialize(It.IsAny<object>()))
+                .Returns(comment.Message);
+
+            var serializerFactoryMock = new Mock<ISerializerFactory>();
+            serializerFactoryMock.Setup(x => x.BuildSerializer()).Returns(serializerMock.Object);
+
+            var pullRequestService = new PullRequestService(
+                new WebConfiguration
+                {
+                    PullRequestRepository = "Test"
+                },
+                serializerFactoryMock.Object,
+                gitHubClientFactoryMock.Object);
+
+            var result = await pullRequestService.TryCreatePullRequestAsync(comment).ConfigureAwait(false);
+
+            Assert.True(result.HasError);
+            Assert.IsType<IndexOutOfRangeException>(result.Exception);
+        }
     }
 }

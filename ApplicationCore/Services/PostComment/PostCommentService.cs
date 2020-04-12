@@ -44,31 +44,31 @@ namespace ApplicationCore
             }
 
             var commentResult = await _commentFactory.CreateFromFormAsync(form).ConfigureAwait(false);
-
-            if (!commentResult.HasErrors)
+            if (commentResult.HasErrors)
             {
-                var pullRequestResult = await _pullRequestService.TryCreatePullRequestAsync(commentResult.Comment).ConfigureAwait(false);
+                return new PostCommentResult(
+                 HttpStatusCode.BadRequest,
+                 $"Creating comment from form failed: {string.Join("\n", commentResult.Errors)}",
+                 commentResult.Exception);
+            }
 
-                if (!pullRequestResult.HasError)
-                {
-                    if (!Uri.TryCreate(form["Redirect"], UriKind.Absolute, out var redirectUri))
-                    {
-                        return new PostCommentResult(HttpStatusCode.OK);
-                    }
-                    else
-                    {
-                        return new PostCommentResult(HttpStatusCode.Redirect, redirectUri);
-                    }
-                }
-                else
-                {
-                    return new PostCommentResult(HttpStatusCode.BadRequest, $"Creating pull request failed: {pullRequestResult.Error}");
-                }
+            var pullRequestResult = await _pullRequestService.TryCreatePullRequestAsync(commentResult.Comment)
+                .ConfigureAwait(false);
+            if (pullRequestResult.HasError)
+            {
+                return new PostCommentResult(
+                    HttpStatusCode.BadRequest,
+                    $"Creating pull request failed: {pullRequestResult.Error}",
+                    pullRequestResult.Exception);
+            }
+
+            if (!Uri.TryCreate(form[FormFields.Redirect], UriKind.Absolute, out var redirectUri))
+            {
+                return new PostCommentResult(HttpStatusCode.OK);
             }
             else
             {
-                // TODO: Include possible exception
-                return new PostCommentResult(HttpStatusCode.BadRequest, string.Join("\n", commentResult.Errors)); 
+                return new PostCommentResult(HttpStatusCode.Redirect, redirectUri);
             }
         }
 
