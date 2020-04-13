@@ -35,10 +35,4 @@
     <ProjectReference Include="..\JekyllBlogCommentsAzure\JekyllBlogCommentsAzure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="local.settings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

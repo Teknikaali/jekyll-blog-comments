@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ApplicationCore.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Moq;
 using Xunit;
 
@@ -11,21 +12,21 @@ namespace ApplicationCore.Tests.Services
     public class PostCommentServiceTests
     {
         private const string _website = "http://www.example.com/";
-        private readonly WebConfiguration _config;
+        private readonly IOptions<WebConfiguration> _config;
 
         public PostCommentServiceTests()
         {
-            _config = new WebConfiguration
+            _config = Options.Create(new WebConfiguration
             {
                 Website = _website
-            };
+            });
         }
 
         [Fact]
         public async Task ThrowsIfFormIsNull()
         {
             var postCommentService = new PostCommentService(
-                new WebConfiguration(),
+                Options.Create(new WebConfiguration()),
                 Mock.Of<ICommentFactory>(),
                 Mock.Of<IPullRequestService>());
 
@@ -77,7 +78,7 @@ namespace ApplicationCore.Tests.Services
 
             Assert.NotEmpty(errorResult.Error);
             Assert.Equal(HttpStatusCode.BadRequest, errorResult.HttpStatusCode);
-            Assert.Equal(errorMessage, errorResult.Error);
+            Assert.Contains(errorMessage, errorResult.Error, StringComparison.InvariantCulture);
         }
 
         [Fact]

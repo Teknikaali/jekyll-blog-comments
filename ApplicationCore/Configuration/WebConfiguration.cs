@@ -1,40 +1,27 @@
-﻿namespace ApplicationCore
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ApplicationCore
 {
     public class WebConfiguration
     {
-        /// <summary>
-        /// Required
-        /// </summary>
+        [Required]
         public string GitHubToken { get; set; } = "";
 
-        /// <summary>
-        /// Required
-        /// </summary>
+        [Required]
+        [RegularExpression(
+            @"^[a-zA-Z0-9]+\/{1}[a-zA-Z0-9]+$",
+            ErrorMessage = "PullRequestRepository: invalid format. Valid format is \"yourAlias/YourRepository\".")]
         public string PullRequestRepository { get; set; } = "";
 
-        /// <summary>
-        /// Required
-        /// </summary>
+        [Required]
         public string Website { get; set; } = "";
 
-        /// <summary>
-        /// Optional
-        /// </summary>
         public string FallbackCommitEmail { get; set; } = "";
 
-        /// <summary>
-        /// Optional
-        /// </summary>
         public string TextAnalyticsSubscriptionKey { get; set; } = "";
 
-        /// <summary>
-        /// Optional
-        /// </summary>
         public string TextAnalyticsRegion { get; set; } = "";
 
-        /// <summary>
-        /// Optional
-        /// </summary>
         public string TextAnalyticsLanguage { get; set; } = "";
     }
 }

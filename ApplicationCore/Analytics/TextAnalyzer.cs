@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ApplicationCore.Model;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics;
 using Microsoft.Azure.CognitiveServices.Language.TextAnalytics.Models;
+using Microsoft.Extensions.Options;
 
 namespace ApplicationCore.Analytics
 {
@@ -18,9 +19,9 @@ namespace ApplicationCore.Analytics
 
         public bool CanAnalyze => !string.IsNullOrEmpty(_config.TextAnalyticsSubscriptionKey);
 
-        public TextAnalyzer(WebConfiguration config, ITextAnalyticsClientFactory textAnalyticsClientFactory)
+        public TextAnalyzer(IOptions<WebConfiguration> config, ITextAnalyticsClientFactory textAnalyticsClientFactory)
         {
-            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _config = config?.Value ?? throw new ArgumentNullException(nameof(config));
             _textAnalyticsClientFactory = textAnalyticsClientFactory
                 ?? throw new ArgumentNullException(nameof(textAnalyticsClientFactory));
         }

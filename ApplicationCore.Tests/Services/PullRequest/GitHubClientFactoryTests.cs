@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Options;
 using Octokit;
 using Xunit;
 
@@ -15,7 +16,8 @@ namespace ApplicationCore.Tests.Services
         [Fact]
         public void CreatesClient()
         {
-            var factory = new GitHubClientFactory(new WebConfiguration { GitHubToken = "GitHubTestToken" });
+            var factory = new GitHubClientFactory(
+                Options.Create(new WebConfiguration { GitHubToken = "GitHubTestToken" }));
 
             Assert.NotNull(factory.CreateClient());
         }
@@ -23,7 +25,7 @@ namespace ApplicationCore.Tests.Services
         [Fact]
         public void UsesAnonymousCredentialsWhenGitHubTokenIsNotAvailable()
         {
-            var factory = new GitHubClientFactory(new WebConfiguration());
+            var factory = new GitHubClientFactory(Options.Create(new WebConfiguration()));
 
             var client = factory.CreateClient();
 

@@ -1,4 +1,6 @@
-﻿using ApplicationCore;
+﻿using System;
+using System.Linq;
+using ApplicationCore;
 using ApplicationCore.Analytics;
 using ApplicationCore.Model;
 using Microsoft.Azure.WebJobs.Host.Bindings;
@@ -24,27 +26,56 @@ namespace JekyllBlogCommentsAzure
                     .GetService<IOptions<ExecutionContextOptions>>().Value;
             var currentDirectory = executionContextOptions.AppDirectory;
 
-            var configRoot = new ConfigurationBuilder()
+            var configuration = new ConfigurationBuilder()
                 .SetBasePath(currentDirectory)
                 .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
 
-            var config = new WebConfiguration();
-            configRoot.GetSection("Values").Bind(config);
+            services.AddOptions<WebConfiguration>();
+            services.ConfigureAndValidate<WebConfiguration>(configuration);
 
-            var commentFactory = new CommentFactory(
-                new CommentFormFactory(),
-                new TextAnalyzer(config, new TextAnalyticsClientFactory(new CredentialsFactory())));
-            var pullRequestService = new PullRequestService(
-                    config,
-                    new SerializerFactory(),
-                    new GitHubClientFactory(config));
+            services.AddSingleton<ICommentFormFactory, CommentFormFactory>();
+            services.AddSingleton<ICredentialsFactory, CredentialsFactory>();
+            services.AddSingleton<ITextAnalyticsClientFactory, TextAnalyticsClientFactory>();
+            services.AddSingleton<ITextAnalyzer, TextAnalyzer>();
+            services.AddSingleton<ICommentFactory, CommentFactory>();
+            services.AddSingleton<ISerializerFactory, SerializerFactory>();
+            services.AddSingleton<IGitHubClientFactory, GitHubClientFactory>();
+            services.AddSingleton<IPullRequestService, PullRequestService>();
 
-            var postCommentService = new PostCommentService(config, commentFactory, pullRequestService);
-            services.AddSingleton<IPostCommentService>(postCommentService);
+            services.AddSingleton<IPostCommentService, PostCommentService>();
 
             return services;
+        }
+
+        public static IServiceCollection ConfigureAndValidate<T>(
+            this IServiceCollection services,
+            IConfiguration config) where T : class
+        {
+            if (services is null)
+            {
+                throw new ArgumentNullException(nameof(services));
+            }
+            if (config is null)
+            {
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            return services
+            .Configure<T>(config.GetSection("Values"))
+            .PostConfigure<T>(settings =>
+            {
+                var configErrors = settings.ValidationErrors().ToList();
+                if (configErrors.Any())
+                {
+                    var errors = string.Join(",", configErrors);
+                    var count = configErrors.Count;
+                    var configType = typeof(T).Name;
+                    throw new ApplicationException(
+                        $"Found {count} configuration error(s) in {configType}: {errors}");
+                }
+            });
         }
     }
 }

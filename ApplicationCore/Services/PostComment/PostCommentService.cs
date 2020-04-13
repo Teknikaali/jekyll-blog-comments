@@ -4,6 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ApplicationCore.Model;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace ApplicationCore
 {
@@ -14,13 +15,13 @@ namespace ApplicationCore
         private readonly IPullRequestService _pullRequestService;
 
         public PostCommentService(
-            WebConfiguration config,
+            IOptions<WebConfiguration> config,
             ICommentFactory commentFactory,
             IPullRequestService pullRequestService)
         {
-            _config = config;
-            _commentFactory = commentFactory;
-            _pullRequestService = pullRequestService;
+            _config = config?.Value ?? throw new ArgumentNullException(nameof(config));
+            _commentFactory = commentFactory ?? throw new ArgumentNullException(nameof(commentFactory));
+            _pullRequestService = pullRequestService ?? throw new ArgumentNullException(nameof(pullRequestService));
         }
 
         public async Task<PostCommentResult> PostCommentAsync(IFormCollection form)

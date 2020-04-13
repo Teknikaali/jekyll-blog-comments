@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.Options;
 using Octokit;
 
 namespace ApplicationCore
@@ -7,9 +8,9 @@ namespace ApplicationCore
     {
         private readonly WebConfiguration _config;
 
-        public GitHubClientFactory(WebConfiguration config)
+        public GitHubClientFactory(IOptions<WebConfiguration> config)
         {
-            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _config = config?.Value ?? throw new ArgumentNullException(nameof(config));
         }
 
         public IGitHubClient CreateClient()

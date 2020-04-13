@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using ApplicationCore.Model;
+using Microsoft.Extensions.Options;
 using Octokit;
 using YamlDotNet.Serialization;
 
@@ -13,7 +14,7 @@ namespace ApplicationCore
         private readonly IGitHubClient _github;
 
         public PullRequestService(
-            WebConfiguration config,
+            IOptions<WebConfiguration> config,
             ISerializerFactory serializerFactory,
             IGitHubClientFactory githubFactory)
         {
@@ -21,13 +22,12 @@ namespace ApplicationCore
             {
                 throw new ArgumentNullException(nameof(serializerFactory));
             }
-
             if (githubFactory is null)
             {
                 throw new ArgumentNullException(nameof(githubFactory));
             }
 
-            _config = config ?? throw new ArgumentNullException(nameof(config));
+            _config = config?.Value ?? throw new ArgumentNullException(nameof(config));
             _serializer = serializerFactory.BuildSerializer();
             _github = githubFactory.CreateClient();
         }
