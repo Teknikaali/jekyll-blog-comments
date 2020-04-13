@@ -43,7 +43,7 @@ To set this up, you'll need to have an [Azure Portal account](https://portal.azu
 
 ## Local development
 
-* You'll need add `local.settings.json` to `JekyllBlogCommentsAzure` and `JekyllBlogCommentsAzure.Tests` projects as these configuration files are excluded from Git with .gitignore.
+* You'll need to add `local.settings.json` to `JekyllBlogCommentsAzure` project as it is excluded from Git with .gitignore.
 ** Example of `local.settings.json`:
 ```
 {
