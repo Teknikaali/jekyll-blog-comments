@@ -63,17 +63,17 @@ namespace JekyllBlogCommentsAzure
             }
 
             return services
-            .Configure<T>(config.GetSection("Values"))
+            .Configure<T>(settings => ConfigurationBinder.Bind(config, settings))
             .PostConfigure<T>(settings =>
             {
                 var configErrors = settings.ValidationErrors().ToList();
                 if (configErrors.Any())
                 {
-                    var errors = string.Join(",", configErrors);
+                    var errors = string.Join(Environment.NewLine, configErrors);
                     var count = configErrors.Count;
                     var configType = typeof(T).Name;
                     throw new ApplicationException(
-                        $"Found {count} configuration error(s) in {configType}: {errors}");
+                        $"Found {count} configuration error(s) in {configType}:{Environment.NewLine}{errors}");
                 }
             });
         }
