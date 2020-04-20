@@ -63,7 +63,7 @@ namespace JekyllBlogCommentsAzure
             }
 
             return services
-            .Configure<T>(settings => ConfigurationBinder.Bind(config, settings))
+            .Configure<T>(ConfigureFromEnvironmentVariables)
             .PostConfigure<T>(settings =>
             {
                 var configErrors = settings.ValidationErrors().ToList();
@@ -76,6 +76,19 @@ namespace JekyllBlogCommentsAzure
                         $"Found {count} configuration error(s) in {configType}:{Environment.NewLine}{errors}");
                 }
             });
+        }
+
+        private static void ConfigureFromEnvironmentVariables<T>(T configuration) where T : class
+        {
+            foreach (var property in typeof(T).GetProperties())
+            {
+                property.SetValue(configuration, GetValue(property.Name));
+            }
+        }
+
+        private static string GetValue(string propertyName)
+        {
+            return Environment.GetEnvironmentVariable(propertyName, EnvironmentVariableTarget.Process) ?? string.Empty;
         }
     }
 }

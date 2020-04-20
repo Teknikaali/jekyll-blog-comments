@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using ApplicationCore;
 using Microsoft.Azure.WebJobs.Host.Bindings;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace JekyllBlogCommentsAzure.Tests
@@ -14,24 +15,43 @@ namespace JekyllBlogCommentsAzure.Tests
         [Fact]
         public void AddPostCommentServiceInitializesCorrectly()
         {
-            var servicesMock = new Mock<ServiceCollection> { CallBase = true };
-            servicesMock.Object.AddOptions<ExecutionContextOptions>();
-            servicesMock.Object.PostConfigure<ExecutionContextOptions>(
+            SetupLocalEnvironmentVariables();
+
+            var services = new ServiceCollection();
+            services.AddOptions<ExecutionContextOptions>();
+            services.PostConfigure<ExecutionContextOptions>(
                 x => x.AppDirectory = Directory.GetCurrentDirectory());
 
-            // Manually define the configuration because Azure doesn't have a "Values" collection
-            // like the local.settings.json has
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-            servicesMock.Object.AddOptions<WebConfiguration>();
-            servicesMock.Object.Configure<WebConfiguration>(configuration.GetSection("Values"));
+            IServiceCollectionExtensions.AddPostCommentService(services);
 
-            IServiceCollectionExtensions.AddPostCommentService(servicesMock.Object);
+            Assert.NotNull(services.BuildServiceProvider().GetService<IPostCommentService>());
+        }
 
-            Assert.NotNull(servicesMock.Object.BuildServiceProvider().GetService<IPostCommentService>());
+        private static void SetupLocalEnvironmentVariables()
+        {
+            // Environment variables aren't automatically set from local.settings.json file
+            // so we must manually map them here before running dependant tests
+            var basePath = Directory.GetCurrentDirectory();
+            var settings = JsonConvert.DeserializeObject<LocalSettings>(
+                File.ReadAllText(basePath + "\\local.settings.json"));
+
+            foreach (var setting in settings.Values)
+            {
+                Environment.SetEnvironmentVariable(setting.Key, setting.Value);
+            }
+        }
+
+        /// <summary>
+        /// Strongly typed local.settings.json
+        /// </summary>
+        [SuppressMessage(
+            "Performance",
+            "CA1812:Avoid uninstantiated internal classes",
+            Justification = "The class is created through late-bound reflection methods")]
+        private class LocalSettings
+        {
+            public bool IsEncrypted { get; set; }
+            public Dictionary<string, string> Values { get; set; } = new Dictionary<string, string>();
         }
     }
 }
